@@ -37,16 +37,6 @@ class GameInfo(
 object Games {
     val all: List<GameInfo> = listOf(
         GameInfo(
-            "kolam", "Kolam", "Draw one loop around the dots",
-            listOf(
-                "Draw a single closed loop along the dotted lines.",
-                "A number tells how many sides of that square the loop uses.",
-                "The loop never crosses or touches itself.",
-                "Tap a side to draw, tap again to mark it empty.",
-            ),
-            Color(0xFFE5487A), "🌸", Shelf.Brain,
-        ) { KolamGame(it) },
-        GameInfo(
             "spicebox", "Spice Box", "Sudoku, one spice per row",
             listOf(
                 "Fill the grid so every row, column and 3×3 box holds 1 to 9 once.",
@@ -145,6 +135,15 @@ object Games {
             ),
             Color(0xFF7B61FF), "🗺️", Shelf.Brain,
         ) { AutoRideGame(it) },
+        GameInfo(
+            "clockwork", "Clockwork", "Set every clock to twelve",
+            listOf(
+                "Tap a gear to turn its clock hand a quarter turn forward.",
+                "Every gear joined to it by a rod turns a quarter turn back.",
+                "Point every hand at twelve to win.",
+            ),
+            Color(0xFFB8860B), "⚙️", Shelf.Brain,
+        ) { ClockworkGame(it) },
         GameInfo(
             "wells", "Hidden Wells", "Logic sweeper, no guessing",
             listOf(

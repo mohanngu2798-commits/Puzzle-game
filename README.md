@@ -7,13 +7,16 @@ Every game has its own levels, a new daily puzzle, streaks and stars. It needs n
 
 | Brain trainers | Quick plays |
 | --- | --- |
-| Kolam: draw one loop around numbered clues | Brick Kiln: place blocks, fire full lines |
-| Spice Box: sudoku | Temple Tiles: match free tile pairs |
-| Rangoli Threads: join colours, fill the floor | Bazaar Trio: collect three of a kind |
-| | Chai Sort: pour until each glass is one colour |
-| | Bolt Bazaar: unscrew bolts into colour boxes |
-
-More games are on the way, up to 20 in total.
+| Spice Box: sudoku | Brick Kiln: place blocks, fire full lines |
+| Rangoli Threads: join colours, fill the floor | Temple Tiles: match free tile pairs |
+| Handloom: weave the hidden pattern (nonogram) | Bazaar Trio: collect three of a kind |
+| Bloom: balance two flowers (binary puzzle) | Chai Sort: pour until each glass is one colour |
+| Tea Estate: one bush per row, column and plot | Bolt Bazaar: unscrew bolts into colour boxes |
+| Auto Ride: one route through every square | Mithai Match: swap sweets, line up three |
+| Clockwork: set every geared clock to twelve | Gold Merge: slide and merge coins |
+| Hidden Wells: logic sweeper, no guessing | Postcards: swap tiles, restore the picture |
+| Godown: push every crate home | Word Hunt: find the hidden words |
+| Auto Jam: free the golden auto | Royal Patience: classic card solitaire |
 
 ## Project layout
 

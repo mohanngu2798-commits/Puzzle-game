@@ -52,22 +52,97 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
+import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-/** Springy press: shrinks a little while held and bounces back, like a physical button. */
+/**
+ * Jelly press: squashes while held (a little wider than tall, like pressing water)
+ * and wobbles back with a soft overshoot when released.
+ */
 fun Modifier.bouncyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier = composed {
     val source = remember { MutableInteractionSource() }
     val pressed by source.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        if (pressed && enabled) 0.93f else 1f,
-        spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium), label = "press",
-    )
+    val sx = remember { Animatable(1f) }
+    val sy = remember { Animatable(1f) }
+    LaunchedEffect(pressed, enabled) {
+        if (!enabled) { sx.snapTo(1f); sy.snapTo(1f); return@LaunchedEffect }
+        if (pressed) coroutineScope {
+            launch { sx.animateTo(0.95f, spring(dampingRatio = 0.6f, stiffness = 900f)) }
+            sy.animateTo(0.89f, spring(dampingRatio = 0.6f, stiffness = 900f))
+        } else coroutineScope {
+            launch { sx.animateTo(1f, spring(dampingRatio = 0.28f, stiffness = 420f)) }
+            sy.animateTo(1f, spring(dampingRatio = 0.24f, stiffness = 380f))
+        }
+    }
     this
-        .graphicsLayer { scaleX = scale; scaleY = scale }
+        .graphicsLayer { scaleX = sx.value; scaleY = sy.value }
         .clickable(interactionSource = source, indication = null, enabled = enabled, onClick = onClick)
 }
+
+/**
+ * Makes a whole screen feel liquid: every touch sends out a soft ripple from the finger,
+ * and the screen gives a tiny jelly wobble. It only watches touches and never consumes them,
+ * so every button and game board underneath works exactly as before.
+ */
+fun Modifier.liquidTouch(tint: Color): Modifier = composed {
+    val wobble = remember { Animatable(0f) }
+    val ripples = remember { androidx.compose.runtime.mutableStateListOf<Ripple>() }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var pivot by remember { mutableStateOf(Offset.Zero) }
+    this
+        .pointerInput(Unit) {
+            awaitPointerEventScope {
+                while (true) {
+                    val e = awaitPointerEvent(PointerEventPass.Initial)
+                    for (ch in e.changes) if (ch.changedToDownIgnoreConsumed()) {
+                        val at = ch.position
+                        pivot = at
+                        val r = Ripple(at, Animatable(0f))
+                        ripples += r
+                        if (ripples.size > 4) ripples.removeAt(0)
+                        scope.launch {
+                            r.t.animateTo(1f, tween(620, easing = androidx.compose.animation.core.FastOutSlowInEasing))
+                            ripples.remove(r)
+                        }
+                        scope.launch {
+                            wobble.snapTo(1f)
+                            wobble.animateTo(0f, spring(dampingRatio = 0.22f, stiffness = 260f))
+                        }
+                    }
+                }
+            }
+        }
+        .graphicsLayer {
+            // A gentle squeeze toward the finger that settles with a few soft wobbles.
+            val k = wobble.value * 0.006f
+            scaleX = 1f - k
+            scaleY = 1f - k * 0.6f
+            if (size.width > 0f) transformOrigin = TransformOrigin(
+                (pivot.x / size.width).coerceIn(0f, 1f), (pivot.y / size.height).coerceIn(0f, 1f),
+            )
+        }
+        .drawWithContent {
+            drawContent()
+            for (r in ripples) {
+                val t = r.t.value
+                val radius = 18.dp.toPx() + t * 90.dp.toPx()
+                val a = (1f - t)
+                drawCircle(tint.copy(alpha = 0.16f * a), radius * 0.55f, r.at)
+                drawCircle(tint.copy(alpha = 0.28f * a), radius, r.at, style = Stroke(width = (2.5f * (1f - t) + 0.5f).dp.toPx()))
+                drawCircle(tint.copy(alpha = 0.14f * a), radius * 0.7f, r.at, style = Stroke(width = 1.5.dp.toPx()))
+            }
+        }
+}
+
+class Ripple(val at: Offset, val t: Animatable<Float, androidx.compose.animation.core.AnimationVector1D>)
 
 /** Horizontal shake whenever [trigger] changes (used for wrong moves). */
 fun Modifier.shake(trigger: Int): Modifier = composed {

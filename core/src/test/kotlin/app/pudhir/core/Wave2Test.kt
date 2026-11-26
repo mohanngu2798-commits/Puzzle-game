@@ -99,3 +99,18 @@ class Wave2Test {
         while (!g.isSolved()) { val (a, b) = g.hint()!!; g.swap(a, b) }
     }
 }
+
+class ClockworkTest {
+    @Test fun hintsSolveEveryBoard() {
+        for (d in Difficulty.entries) for (s in 1L..20L) {
+            val g = Clockwork.generate(s, d)
+            assertTrue(!g.isSolved())
+            var n = 0
+            while (!g.isSolved() && n < 500) { g.tap(g.hint()!!); n++ }
+            assertTrue(g.isSolved())
+            assertEquals(g.par, n)
+            while (g.undo()) {}
+            assertTrue(!g.isSolved())
+        }
+    }
+}
