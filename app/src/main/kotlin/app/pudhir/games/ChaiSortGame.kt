@@ -156,7 +156,7 @@ private fun ChaiBoard(s: PlaySession, start: ChaiSort) {
                                         .zIndex(if (mine != null) 2f else 0f)
                                         .onGloballyPositioned { positions[i] = it.positionInRoot() - origin }
                                         .graphicsLayer {
-                                            var tx = 0f; var ty = lift * density; var rot = 0f
+                                            var tx = 0f; var ty = lift.dp.toPx(); var rot = 0f
                                             if (mine != null && target != null && here != null) {
                                                 val toRight = target.x >= here.x
                                                 // Mouth of the tilted glass sits just above the target's rim.
