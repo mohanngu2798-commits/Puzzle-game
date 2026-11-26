@@ -71,7 +71,7 @@ private fun HandloomBoard(s: PlaySession, puzzle: HandloomPuzzle) {
         BoxWithConstraints(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
             val side = minOf(maxWidth, maxHeight)
             Box(Modifier.size(side).shadow(6.dp, RoundedCornerShape(20.dp)).clip(RoundedCornerShape(20.dp)).background(p.surface).padding(8.dp)) {
-                var stroke = remember { mutableListOf<Pair<Int, Int>>() }.let { it }
+                val stroke = remember { mutableListOf<Pair<Int, Int>>() }
                 var paintValue by remember { mutableIntStateOf(1) }
                 Canvas(
                     Modifier.fillMaxSize()
@@ -83,14 +83,14 @@ private fun HandloomBoard(s: PlaySession, puzzle: HandloomPuzzle) {
                             }
                             fun paint(pos: Int) {
                                 if (g[pos] == paintValue) return
-                                stroke += pos to g[pos]; g[pos] = paintValue; s.haptic(false)
+                                stroke.add(pos to g[pos]); g[pos] = paintValue; s.haptic(false)
                             }
                             detectDragGestures(
                                 onDragStart = { o ->
                                     val pos = cellAt(o) ?: return@detectDragGestures
                                     val want = if (crossMode) 2 else 1
                                     paintValue = if (g[pos] == want) 0 else want
-                                    stroke = mutableListOf(); paint(pos)
+                                    stroke.clear(); paint(pos)
                                 },
                                 onDrag = { ch, _ -> cellAt(ch.position)?.let { paint(it) } },
                                 onDragEnd = { if (stroke.isNotEmpty()) history += stroke.toList(); check() },

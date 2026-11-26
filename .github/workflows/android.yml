@@ -37,6 +37,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "test-${{ github.run_number }}" "pudhir-test-${{ github.run_number }}.apk" \
+          files="pudhir-test-${{ github.run_number }}.apk"
+          if ls app/src/test/snapshots/images/*.png >/dev/null 2>&1; then
+            (cd app/src/test/snapshots/images && zip -q -r "$GITHUB_WORKSPACE/screenshots.zip" .)
+            files="$files screenshots.zip"
+          fi
+          gh release create "test-${{ github.run_number }}" $files \
             --target "${{ github.sha }}" --prerelease --title "Pudhir test build ${{ github.run_number }}" \
             --notes "Test build from ${{ github.ref_name }} (${{ github.sha }})."
