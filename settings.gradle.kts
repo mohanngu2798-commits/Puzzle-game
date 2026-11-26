@@ -15,6 +15,7 @@ pluginManagement {
         id("org.jetbrains.kotlin.android") version "2.1.21"
         id("org.jetbrains.kotlin.jvm") version "2.1.21"
         id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
+        id("app.cash.paparazzi") version "1.3.5"
     }
 }
 dependencyResolutionManagement {

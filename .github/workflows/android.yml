@@ -18,6 +18,14 @@ jobs:
         run: ./gradlew :core:test
       - name: Build test APK
         run: ./gradlew :app:assembleDebug
+      - name: Render screenshots
+        continue-on-error: true
+        run: ./gradlew :app:recordPaparazziDebug
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pudhir-screenshots
+          path: app/src/test/snapshots/images/
       - name: Rename APK
         run: cp app/build/outputs/apk/debug/app-debug.apk "pudhir-test-${{ github.run_number }}.apk"
       - uses: actions/upload-artifact@v4
