@@ -94,7 +94,7 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
             Pill("⭐ ${progress.wallet()}", lighten(p.gold, 0.7f), darken(p.gold, 0.5f), 30.dp)
             if (!game.endless && !daily) Box(
                 Modifier.size(40.dp).clip(CircleShape).bouncyClick {
-                    val skip = { progress.skipLevel(gameId); seconds = 0; round++ }
+                    val skip: () -> Unit = { progress.skipLevel(gameId); seconds = 0; round += 1 }
                     if (progress.spend(SKIP_COST)) skip() else adOffer = "a free skip" to skip
                 },
                 contentAlignment = Alignment.Center,
