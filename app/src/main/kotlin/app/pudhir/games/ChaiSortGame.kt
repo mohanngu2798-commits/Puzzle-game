@@ -47,9 +47,11 @@ import app.pudhir.ui.bouncyClick
 import app.pudhir.ui.shake
 
 @Composable
-fun ChaiSortGame(s: PlaySession) {
+fun ChaiSortGame(s: PlaySession) = Generated(s, { ChaiSort.generate(s.seed, s.difficulty) }) { ChaiBoard(s, it) }
+
+@Composable
+private fun ChaiBoard(s: PlaySession, start: ChaiSort) {
     val p = LocalPalette.current
-    val start = remember { ChaiSort.generate(s.seed, s.difficulty) }
     var game by remember { mutableStateOf(start.copy()) }
     var version by remember { mutableIntStateOf(0) }
     val history = remember { mutableStateListOf<ChaiSort>() }
