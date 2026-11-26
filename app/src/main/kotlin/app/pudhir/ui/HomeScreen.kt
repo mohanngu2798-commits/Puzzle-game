@@ -80,7 +80,7 @@ fun HomeScreen(progress: Progress, onPlay: (String, Boolean) -> Unit, onStats: (
         item {
             Column(Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
                 Text(greeting(), style = MaterialTheme.typography.displaySmall, color = p.ink)
-                Text("Sharpen your mind, one puzzle at a time.", style = MaterialTheme.typography.bodyLarge, color = p.muted)
+                Text("Sharpen your mind, one puzzle a day.", style = MaterialTheme.typography.bodyLarge, color = p.muted)
             }
         }
         item { TodayCard(doneToday, dailies.size) }
