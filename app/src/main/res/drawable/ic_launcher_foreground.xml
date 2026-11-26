@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pudhir mark: a kolam knot looping around four dots. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#F26B3A"
+        android:pathData="M54,24 L84,54 L54,84 L24,54 Z" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:fillColor="#00000000"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M54,38 C60,32 70,38 64,44 C70,38 76,48 70,54 C76,60 70,70 64,64 C70,70 60,76 54,70 C48,76 38,70 44,64 C38,70 32,60 38,54 C32,48 38,38 44,44 C38,38 48,32 54,38 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M54,54 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path android:fillColor="#FFE2B8" android:pathData="M54,44 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#FFE2B8" android:pathData="M54,64 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#FFE2B8" android:pathData="M44,54 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#FFE2B8" android:pathData="M64,54 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>
