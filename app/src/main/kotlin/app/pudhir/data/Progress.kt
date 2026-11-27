@@ -21,7 +21,15 @@ class Progress(context: Context) {
 
     fun today(): Long = LocalDate.now().toEpochDay()
 
-    fun level(game: String): Int { version; return prefs.getInt("level_$game", 1) }
+    /** Difficulty the player picked for a game (0 Easy .. 3 Expert), or -1 before they have chosen. */
+    fun difficulty(game: String): Int { version; return prefs.getInt("diff_$game", -1) }
+    fun setDifficulty(game: String, d: Int) = edit { putInt("diff_$game", d) }
+
+    /** Each difficulty keeps its own level count, so switching never loses progress. */
+    private fun levelKey(game: String) = "level_${game}_${prefs.getInt("diff_$game", -1).coerceAtLeast(0)}"
+
+    fun level(game: String): Int { version; return prefs.getInt(levelKey(game), 1) }
+    fun levelAt(game: String, d: Int): Int { version; return prefs.getInt("level_${game}_$d", 1) }
     fun wins(game: String): Int { version; return prefs.getInt("wins_$game", 0) }
     fun stars(game: String): Int { version; return prefs.getInt("stars_$game", 0) }
     fun bestTime(game: String): Int { version; return prefs.getInt("best_$game", 0) }
@@ -56,7 +64,7 @@ class Progress(context: Context) {
                     if (s > prefs.getInt("best_streak", 0)) putInt("best_streak", s)
                 }
             } else {
-                putInt("level_$game", prefs.getInt("level_$game", 1) + 1)
+                putInt(levelKey(game), prefs.getInt(levelKey(game), 1) + 1)
             }
         }
     }
@@ -71,7 +79,7 @@ class Progress(context: Context) {
         return true
     }
 
-    fun skipLevel(game: String) = edit { putInt("level_$game", prefs.getInt("level_$game", 1) + 1) }
+    fun skipLevel(game: String) = edit { putInt(levelKey(game), prefs.getInt(levelKey(game), 1) + 1) }
 
     fun recordScore(game: String, score: Int) {
         if (score > prefs.getInt("score_$game", 0)) edit { putInt("score_$game", score) }

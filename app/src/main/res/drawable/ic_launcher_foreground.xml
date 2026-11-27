@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pudhir mark: a kolam knot looping around four dots. -->
+<!-- Pudhir mark: four puzzle tiles, one still to be solved, and a spark. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="#F26B3A"
-        android:pathData="M54,24 L84,54 L54,84 L24,54 Z" />
-    <path android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:fillColor="#00000000"
-        android:strokeLineCap="round" android:strokeLineJoin="round"
-        android:pathData="M54,38 C60,32 70,38 64,44 C70,38 76,48 70,54 C76,60 70,70 64,64 C70,70 60,76 54,70 C48,76 38,70 44,64 C38,70 32,60 38,54 C32,48 38,38 44,44 C38,38 48,32 54,38 Z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M54,54 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
-    <path android:fillColor="#FFE2B8" android:pathData="M54,44 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
-    <path android:fillColor="#FFE2B8" android:pathData="M54,64 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
-    <path android:fillColor="#FFE2B8" android:pathData="M44,54 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
-    <path android:fillColor="#FFE2B8" android:pathData="M64,54 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <group android:rotation="45" android:pivotX="54" android:pivotY="54">
+    <path android:pathData="M37,33 h10 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-10 a4,4 0 0 1 -4,-4 v-10 a4,4 0 0 1 4,-4z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="33" android:startY="33" android:endX="51" android:endY="51">
+                <item android:offset="0" android:color="#FFFFB08A" />
+                <item android:offset="1" android:color="#FFF0553A" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M61,33 h10 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-10 a4,4 0 0 1 -4,-4 v-10 a4,4 0 0 1 4,-4z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="57" android:startY="33" android:endX="75" android:endY="51">
+                <item android:offset="0" android:color="#FFFFE8A3" />
+                <item android:offset="0.5" android:color="#FFF2C14E" />
+                <item android:offset="1" android:color="#FFC98A1B" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M37,57 h10 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-10 a4,4 0 0 1 -4,-4 v-10 a4,4 0 0 1 4,-4z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="33" android:startY="57" android:endX="51" android:endY="75">
+                <item android:offset="0" android:color="#FFFFE8A3" />
+                <item android:offset="0.5" android:color="#FFF2C14E" />
+                <item android:offset="1" android:color="#FFC98A1B" />
+            </gradient>
+        </aapt:attr>
+    </path>
+        <path android:strokeWidth="2.8" android:fillColor="#00000000"
+            android:pathData="M61,57 h10 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 h-10 a4,4 0 0 1 -4,-4 v-10 a4,4 0 0 1 4,-4z">
+            <aapt:attr name="android:strokeColor">
+                <gradient android:type="linear" android:startX="57" android:startY="57" android:endX="75" android:endY="75">
+                    <item android:offset="0" android:color="#FFFFE8A3" />
+                    <item android:offset="1" android:color="#FFC98A1B" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+    <path android:fillColor="#FFFFE8A3" android:pathData="M76,30 l1.5,4 4,1.5 -4,1.5 -1.5,4 -1.5,-4 -4,-1.5 4,-1.5z" />
 </vector>

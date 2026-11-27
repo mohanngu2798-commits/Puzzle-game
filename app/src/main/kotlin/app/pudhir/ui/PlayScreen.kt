@@ -36,9 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import app.pudhir.core.Seeds
-import app.pudhir.core.difficultyForLevel
 import app.pudhir.core.Difficulty
 import app.pudhir.data.Progress
 import app.pudhir.games.Games
@@ -64,15 +64,25 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
     var outcome by remember { mutableStateOf<Outcome?>(null) }
     var seconds by remember { mutableIntStateOf(0) }
     var adOffer by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
-    var showRules by remember { mutableStateOf(progress.level(gameId) == 1 && progress.wins(gameId) == 0) }
+    var showRules by remember { mutableStateOf(progress.wins(gameId) == 0) }
+    // Levels ask for a difficulty first; daily puzzles and endless games don't.
+    val picks = !daily && !game.endless
+    // Asked each time the game is opened (not before every level); the last choice is pre-selected.
+    var choosing by remember { mutableStateOf(picks) }
+    val chosen = progress.difficulty(gameId)
 
-    val level = remember(round) { progress.level(gameId) }
-    val difficulty = if (daily) Difficulty.Medium else difficultyForLevel(level)
-    val seed = if (daily) Seeds.daily(gameId, progress.today()) else Seeds.level(gameId, level)
+    val level = remember(round, chosen) { progress.level(gameId) }
+    val difficulty = if (daily || !picks) Difficulty.Medium else Difficulty.entries[chosen.coerceIn(0, 3)]
+    // Each difficulty has its own run of levels; the original series stays as Medium.
+    val seed = when {
+        daily -> Seeds.daily(gameId, progress.today())
+        difficulty == Difficulty.Medium -> Seeds.level(gameId, level)
+        else -> Seeds.level(gameId + "/" + difficulty.name, level)
+    }
 
     LaunchedEffect(round, outcome) {
         if (outcome != null) return@LaunchedEffect
-        while (true) { delay(1000); if (!showRules) seconds++ }
+        while (true) { delay(1000); if (!showRules && !choosing) seconds++ }
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
@@ -87,7 +97,10 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
                     game.endless -> "Best ${progress.bestScore(gameId)}"
                     else -> "Level $level · ${difficulty.label}"
                 }
-                Text(sub, style = MaterialTheme.typography.labelMedium, color = p.muted)
+                if (picks) Text(
+                    "$sub ▾", style = MaterialTheme.typography.labelMedium, color = game.accent, fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.bouncyClick { choosing = true },
+                ) else Text(sub, style = MaterialTheme.typography.labelMedium, color = p.muted)
             }
             if (!game.endless) Pill("⏱ ${formatTime(seconds)}", p.surfaceAlt, p.ink, 30.dp)
             Spacer(Modifier.width(6.dp))
@@ -104,7 +117,8 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
             }
         }
         Box(Modifier.weight(1f).fillMaxWidth()) {
-            key(gameId, daily, level, round) {
+            if (choosing) return@Box // nothing to play until a difficulty is picked
+            key(gameId, daily, level, round, chosen) {
                 game.content(
                     PlaySession(
                         gameId = gameId, seed = seed, difficulty = difficulty, accent = game.accent,
@@ -169,7 +183,15 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
         null -> {}
     }
 
-    if (showRules) AlertDialog(
+    if (choosing) DifficultyPicker(
+        game = game,
+        current = chosen,
+        levelFor = { d -> progress.levelAt(gameId, d) },
+        onPick = { d -> progress.setDifficulty(gameId, d); seconds = 0; choosing = false },
+        onDismiss = { if (chosen < 0) onHome() else choosing = false },
+    )
+
+    if (showRules && !choosing) AlertDialog(
         onDismissRequest = { showRules = false },
         confirmButton = { TextButton(onClick = { showRules = false }) { Text("Let's play", fontWeight = FontWeight.Bold) } },
         icon = { GlyphTile(game, 56.dp) },
@@ -181,6 +203,61 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
                         Box(Modifier.padding(top = 7.dp).size(6.dp).clip(CircleShape).background(game.accent))
                         Spacer(Modifier.width(10.dp))
                         Text(r, fontSize = 15.sp, color = p.ink)
+                    }
+                }
+            }
+        },
+    )
+}
+
+private val DifficultyNotes = listOf(
+    "Easy" to "Small boards, gentle start",
+    "Medium" to "A steady challenge",
+    "Hard" to "Bigger boards, fewer clues",
+    "Expert" to "For the sharpest minds",
+)
+
+@Composable
+private fun DifficultyPicker(
+    game: app.pudhir.games.GameInfo,
+    current: Int,
+    levelFor: (Int) -> Int,
+    onPick: (Int) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val p = LocalPalette.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text(if (current < 0) "Back" else "Keep ${DifficultyNotes[current].first}") } },
+        icon = { GlyphTile(game, 56.dp) },
+        title = { Text("Choose your level") },
+        text = {
+            Column {
+                DifficultyNotes.forEachIndexed { i, (name, note) ->
+                    val on = i == current
+                    Row(
+                        Modifier.fillMaxWidth().padding(vertical = 5.dp).popIn(i * 60)
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(16.dp))
+                            .background(if (on) lighten(game.accent, if (p.dark) 0.1f else 0.82f) else p.surfaceAlt)
+                            .bouncyClick { onPick(i) }
+                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        // Filled dots show how hard it is.
+                        Row {
+                            for (k in 0 until 4) Box(
+                                Modifier.padding(end = 3.dp).size(8.dp).clip(CircleShape)
+                                    .background(if (k <= i) game.accent else p.line),
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(name, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = if (on && p.dark) Color.White else p.ink)
+                            Text(note, fontSize = 13.sp, color = if (on && p.dark) Color.White.copy(alpha = 0.8f) else p.muted)
+                        }
+                        val lv = levelFor(i)
+                        if (lv > 1) Text("Level $lv", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = darken(game.accent, 0.2f))
                     }
                 }
             }
