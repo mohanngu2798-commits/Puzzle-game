@@ -18,6 +18,8 @@ jobs:
         run: ./gradlew :core:test
       - name: Build test APK
         run: ./gradlew :app:assembleDebug
+      - name: Build store bundle (unsigned; signed later with the upload key)
+        run: ./gradlew :app:bundleRelease
       - name: Render screenshots
         continue-on-error: true
         run: ./gradlew :app:recordPaparazziDebug
@@ -38,6 +40,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           files="pudhir-test-${{ github.run_number }}.apk"
+          cp app/build/outputs/bundle/release/app-release.aab "pudhir-release-unsigned-${{ github.run_number }}.aab"
+          files="$files pudhir-release-unsigned-${{ github.run_number }}.aab"
           if ls app/src/test/snapshots/images/*.png >/dev/null 2>&1; then
             (cd app/src/test/snapshots/images && zip -q -r "$GITHUB_WORKSPACE/screenshots.zip" .)
             files="$files screenshots.zip"
