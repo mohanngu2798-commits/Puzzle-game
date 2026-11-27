@@ -42,6 +42,7 @@ import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.lighten
 import app.pudhir.ui.popIn
 import app.pudhir.ui.shake
@@ -94,13 +95,13 @@ private fun TrioBoard(s: PlaySession, onRestart: () -> Unit) {
                         Modifier
                             .offset(x = tile * t.x, y = tile * t.y)
                             .size(tile)
+                            .jellyClick { tap(i) }
                             .padding(2.dp)
                             .graphicsLayer { scaleX = gone; scaleY = gone; alpha = gone }
                             .shadow(if (free) 4.dp else 1.dp, RoundedCornerShape(14.dp))
                             .clip(RoundedCornerShape(14.dp))
                             .background(if (free) p.surface else if (p.dark) Color(0xFF2B2832) else Color(0xFFE4DDD3))
-                            .border(if (hintTile == i) 3.dp else 1.dp, if (hintTile == i) Color(0xFFF5B83D) else p.line, RoundedCornerShape(14.dp))
-                            .bouncyClick { tap(i) },
+                            .border(if (hintTile == i) 3.dp else 1.dp, if (hintTile == i) Color(0xFFF5B83D) else p.line, RoundedCornerShape(14.dp)),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(BazaarFaces[t.face % BazaarFaces.size], fontSize = (tile.value * 0.5f).sp, modifier = Modifier.graphicsLayer { alpha = if (free) 1f else 0.4f })

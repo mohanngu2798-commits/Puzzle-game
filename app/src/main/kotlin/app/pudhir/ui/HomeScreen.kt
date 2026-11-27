@@ -1,5 +1,6 @@
 package app.pudhir.ui
 
+import androidx.compose.ui.graphics.drawscope.rotate as drawRotate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -126,7 +127,7 @@ fun LogoMark(size: androidx.compose.ui.unit.Dp) {
         val u = this.size.width / 108f
         val gold = Brush.linearGradient(listOf(Color(0xFFFFE8A3), Color(0xFFF2C14E), Color(0xFFC98A1B)))
         val coral = Brush.linearGradient(listOf(Color(0xFFFFB08A), Color(0xFFF0553A)))
-        androidx.compose.ui.graphics.drawscope.rotate(45f) {
+        drawRotate(45f) {
             val r = androidx.compose.ui.geometry.CornerRadius(5f * u)
             fun tile(x: Float, y: Float, b: Brush, outline: Boolean = false) = drawRoundRect(
                 b, androidx.compose.ui.geometry.Offset(x * u, y * u), androidx.compose.ui.geometry.Size(18 * u, 18 * u), r,
@@ -180,10 +181,10 @@ private fun DailyChip(g: GameInfo, done: Boolean, onClick: () -> Unit) {
     Column(
         Modifier
             .width(96.dp)
+            .jellyClick(onClick = onClick)
             .shadow(3.dp, RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp))
             .background(p.surface)
-            .bouncyClick(onClick = onClick)
             .padding(vertical = 14.dp, horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -215,10 +216,10 @@ private fun GameCard(g: GameInfo, progress: Progress, index: Int, onClick: () ->
         Modifier
             .fillMaxWidth()
             .popIn(60 * (index % 8))
+            .jellyClick(onClick = onClick)
             .shadow(4.dp, RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
             .background(p.surface)
-            .bouncyClick(onClick = onClick)
             .padding(16.dp),
     ) {
         GlyphTile(g, 56.dp)

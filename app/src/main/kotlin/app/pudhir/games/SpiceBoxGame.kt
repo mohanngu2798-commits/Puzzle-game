@@ -47,6 +47,7 @@ import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.lighten
 import app.pudhir.ui.shake
 
@@ -182,8 +183,8 @@ fun SpiceBoxGame(s: PlaySession) {
             for (d in 1..9) {
                 val left = 9 - values.count { it == d }
                 Column(
-                    Modifier.weight(1f).aspectRatio(0.72f).shadow(2.dp, RoundedCornerShape(12.dp)).clip(RoundedCornerShape(12.dp))
-                        .background(if (left == 0) p.surfaceAlt else p.surface).bouncyClick(left > 0) { enter(d) },
+                    Modifier.weight(1f).aspectRatio(0.72f).jellyClick(left > 0) { enter(d) }.shadow(2.dp, RoundedCornerShape(12.dp)).clip(RoundedCornerShape(12.dp))
+                        .background(if (left == 0) p.surfaceAlt else p.surface),
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
                 ) {
                     Text("$d", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = if (left == 0) p.muted else s.accent)

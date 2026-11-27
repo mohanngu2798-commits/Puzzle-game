@@ -33,7 +33,7 @@ fun PudhirApp(progress: Progress) {
     PudhirTheme(progress.theme) {
         val p = LocalPalette.current
         BackHandler(enabled = screen != Screen.Home) { screen = Screen.Home }
-        Box(Modifier.fillMaxSize().background(p.bg).liquidTouch(if (p.dark) androidx.compose.ui.graphics.Color(0xFF9CCBFF) else androidx.compose.ui.graphics.Color(0xFF3D8BD9))) {
+        Box(Modifier.fillMaxSize().background(p.bg) {
             AnimatedContent(
                 targetState = screen,
                 transitionSpec = {

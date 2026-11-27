@@ -40,7 +40,7 @@ import app.pudhir.core.RoyalPatience
 import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
-import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.darken
 import app.pudhir.ui.shake
 import kotlinx.coroutines.delay
@@ -107,7 +107,7 @@ fun RoyalPatienceGame(s: PlaySession) {
             val faceDownStep = ch * 0.14f
             version.let {
                 // Stock.
-                Box(Modifier.offset(gap, 0.dp).bouncyClick { game.draw(); after(true) }) {
+                Box(Modifier.offset(gap, 0.dp).jellyClick { game.draw(); after(true) }) {
                     PlayingCard(if (game.stock.isEmpty()) null else Card(0, 1, false), cw, ch, s.accent)
                     if (game.stock.isEmpty()) Text("↻", fontSize = 22.sp, color = p.muted, modifier = Modifier.align(Alignment.Center))
                 }
@@ -117,7 +117,7 @@ fun RoyalPatienceGame(s: PlaySession) {
                     val top = k == shown.lastIndex
                     PlayingCard(
                         card, cw, ch, s.accent, highlight = top && hint?.first == RoyalPatience.Waste,
-                        modifier = Modifier.offset(gap * 2 + cw + cw * 0.28f * k, 0.dp).then(if (top) Modifier.bouncyClick { after(game.autoMove(RoyalPatience.Waste)) } else Modifier),
+                        modifier = Modifier.offset(gap * 2 + cw + cw * 0.28f * k, 0.dp).then(if (top) Modifier.jellyClick { after(game.autoMove(RoyalPatience.Waste)) } else Modifier),
                     )
                 }
                 // Foundations.
@@ -144,7 +144,7 @@ fun RoyalPatienceGame(s: PlaySession) {
                             PlayingCard(
                                 card, cw, ch, s.accent, highlight = isHint,
                                 modifier = Modifier.offset(ax, ay).then(
-                                    if (card.up) Modifier.bouncyClick { after(game.autoMove(RoyalPatience.Pile(col, idx))) } else Modifier,
+                                    if (card.up) Modifier.jellyClick { after(game.autoMove(RoyalPatience.Pile(col, idx))) } else Modifier,
                                 ),
                             )
                         }

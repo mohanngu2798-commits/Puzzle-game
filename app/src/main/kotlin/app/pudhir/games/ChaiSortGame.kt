@@ -61,6 +61,7 @@ import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.PieceColours
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -174,7 +175,7 @@ private fun ChaiBoard(s: PlaySession, start: ChaiSort) {
                                         highlight = hintMove?.let { it.first == i || it.second == i } ?: false,
                                         complete = complete(i),
                                         wobbleKey = if (wobble == i) wobbleKey else 0,
-                                        modifier = Modifier.width(glassW).height(glassH).bouncyClick { tap(i) },
+                                        modifier = Modifier.width(glassW).height(glassH).jellyClick { tap(i) },
                                     )
                                 }
                             }

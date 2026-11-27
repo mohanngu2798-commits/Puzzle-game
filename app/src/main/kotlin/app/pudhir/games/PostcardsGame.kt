@@ -45,6 +45,7 @@ import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
@@ -204,10 +205,9 @@ fun PostcardsGame(s: PlaySession) {
                             val lift by animateFloatAsState(if (selected == slot) 1f else 0f, spring(stiffness = 600f), label = "lift")
                             val locked = game.locked(slot)
                             Box(
-                                Modifier.offset(x, y).size(pw, ph)
+                                Modifier.offset(x, y).size(pw, ph).jellyClick { tap(slot) }
                                     .graphicsLayer { scaleX = 1f - lift * 0.06f; scaleY = scaleX }
-                                    .then(if (locked) Modifier else Modifier.padding(1.dp).border(if (selected == slot) 3.dp else 0.5.dp, if (selected == slot) s.accent else Color.White.copy(alpha = 0.7f)))
-                                    .bouncyClick { tap(slot) },
+                                    .then(if (locked) Modifier else Modifier.padding(1.dp).border(if (selected == slot) 3.dp else 0.5.dp, if (selected == slot) s.accent else Color.White.copy(alpha = 0.7f))),
                             ) {
                                 Canvas(Modifier.fillMaxSize()) {
                                     val fullW = size.width * game.cols; val fullH = size.height * game.rows

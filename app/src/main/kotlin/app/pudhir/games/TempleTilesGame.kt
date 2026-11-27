@@ -39,7 +39,7 @@ import app.pudhir.core.TempleTiles
 import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
-import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.shake
 import kotlin.random.Random
 
@@ -101,6 +101,7 @@ fun TempleTilesGame(s: PlaySession) {
                         Modifier
                             .offset(x = tileW * pos.c + depth * (game.layers - pos.layer), y = tileH * pos.r + depth * (game.layers - pos.layer) - depth * pos.layer * 0.2f)
                             .size(tileW, tileH)
+                            .jellyClick { tap(i) }
                             .graphicsLayer {
                                 scaleX = gone * (1 + lift * 0.06f); scaleY = gone * (1 + lift * 0.06f); alpha = gone
                                 translationY = -lift * 6.dp.toPx()
@@ -116,8 +117,7 @@ fun TempleTilesGame(s: PlaySession) {
                                 if (sel || isHint) 2.5.dp else 0.dp,
                                 if (sel) s.accent else if (isHint) Color(0xFFF5B83D) else Color.Transparent,
                                 RoundedCornerShape(tileW * 0.16f),
-                            )
-                            .bouncyClick { tap(i) },
+                            ),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(

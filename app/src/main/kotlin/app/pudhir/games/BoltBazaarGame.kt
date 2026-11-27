@@ -47,6 +47,7 @@ import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.PieceColours
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.darken
 import app.pudhir.ui.lighten
 import app.pudhir.ui.popIn
@@ -155,10 +156,9 @@ private fun BoltBoard(s: PlaySession, onRestart: () -> Unit) {
                         val size = unit * 0.62f
                         Bolt(
                             PieceColours[bolt.colour], size, !free,
-                            Modifier.offset(unit * bolt.x - size / 2, unit * bolt.y - size / 2)
+                            Modifier.offset(unit * bolt.x - size / 2, unit * bolt.y - size / 2).jellyClick { tap(b) }
                                 .graphicsLayer { scaleX = 1 + out * 0.6f; scaleY = 1 + out * 0.6f; alpha = 1 - out; rotationZ = out * 360f }
-                                .then(if (hintBolt == b) Modifier.border(3.dp, Color(0xFFF5B83D), CircleShape) else Modifier)
-                                .bouncyClick { tap(b) },
+                                .then(if (hintBolt == b) Modifier.border(3.dp, Color(0xFFF5B83D), CircleShape) else Modifier),
                         )
                     }
                 }

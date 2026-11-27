@@ -40,6 +40,7 @@ import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
 import app.pudhir.ui.LocalPalette
 import app.pudhir.ui.bouncyClick
+import app.pudhir.ui.jellyClick
 import app.pudhir.ui.darken
 import app.pudhir.ui.lighten
 import kotlin.math.cos
@@ -90,7 +91,7 @@ fun ClockworkGame(s: PlaySession) {
                     val face by animateColorAsState(if (home) Color(0xFF2BA36B) else if (p.dark) Color(0xFF2C2832) else Color.White, label = "face")
                     Box(
                         Modifier.offset(cell * (i % game.cols), cell * (i / game.cols)).size(cell).padding(cell * 0.04f)
-                            .bouncyClick { tap(i) },
+                            .jellyClick { tap(i) },
                         contentAlignment = Alignment.Center,
                     ) {
                         Gear(angle, face, home, hintGear == i, s.accent, p.dark)
