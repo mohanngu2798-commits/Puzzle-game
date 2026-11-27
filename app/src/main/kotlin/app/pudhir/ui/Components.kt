@@ -79,7 +79,7 @@ fun Modifier.bouncyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier
 
 /**
  * Glassy, jelly touch for game icons and game pieces. While the finger is down the piece squishes,
- * leans toward the finger and follows it as it slides, with a glassy shine under the finger.
+ * leans toward the finger and follows it as it slides,.
  * On release it wobbles back into place like a drop of water.
  * Place it early in the modifier chain so the whole piece (shadow and background too) moves.
  * Moves are never consumed, so scrolling lists and drags keep working.
@@ -87,7 +87,6 @@ fun Modifier.bouncyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier
 fun Modifier.jellyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier = composed {
     val pull = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     val squish = remember { Animatable(1f) }
-    val shine = remember { Animatable(0f) }
     var touch by remember { mutableStateOf(Offset.Zero) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     val latestClick = androidx.compose.runtime.rememberUpdatedState(onClick)
@@ -106,7 +105,6 @@ fun Modifier.jellyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier 
                 if (!latestEnabled.value) return@awaitEachGesture
                 touch = down.position
                 scope.launch { squish.animateTo(0.92f, spring(dampingRatio = 0.55f, stiffness = 900f)) }
-                scope.launch { shine.animateTo(1f, tween(140)) }
                 scope.launch { pull.animateTo(lean(down.position), spring(dampingRatio = 0.6f, stiffness = 900f)) }
                 var cancelled = false
                 var travelled = 0f
@@ -123,7 +121,6 @@ fun Modifier.jellyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier 
                 // Release: wobble back like water.
                 scope.launch { pull.animateTo(Offset.Zero, spring(dampingRatio = 0.3f, stiffness = 380f)) }
                 scope.launch { squish.animateTo(1f, spring(dampingRatio = 0.28f, stiffness = 420f)) }
-                scope.launch { shine.animateTo(0f, tween(380)) }
                 if (!cancelled && inside && travelled < viewConfiguration.touchSlop * 4) latestClick.value()
             }
         }
@@ -133,16 +130,6 @@ fun Modifier.jellyClick(enabled: Boolean = true, onClick: () -> Unit): Modifier 
             scaleX = 1f - (1f - squish.value) * 0.6f
             scaleY = squish.value
             rotationZ = pull.value.x * 0.35f
-        }
-        .drawWithContent {
-            drawContent()
-            if (shine.value > 0f) drawCircle(
-                Brush.radialGradient(
-                    listOf(Color.White.copy(alpha = 0.45f * shine.value), Color.White.copy(alpha = 0f)),
-                    center = touch, radius = size.minDimension * 0.6f,
-                ),
-                radius = size.minDimension * 0.6f, center = touch,
-            )
         }
 }
 
