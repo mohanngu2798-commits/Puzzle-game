@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pudhir icon: a gold window onto four of the games inside (Spice Box, Chai Sort, Royal Patience, Clockwork). -->
+<!-- Pudhir icon: three game pieces (Spice Box 7, a spade, a Clockwork dial) and a gold piece snapping into place. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <group android:scaleX="0.8" android:scaleY="0.8" android:pivotX="54" android:pivotY="54">
-    <path android:pathData="M36,22 h36 a14,14 0 0 1 14,14 v36 a14,14 0 0 1 -14,14 h-36 a14,14 0 0 1 -14,-14 v-36 a14,14 0 0 1 14,-14z">
-        <aapt:attr name="android:fillColor">
-            <gradient android:type="linear" android:startX="22" android:startY="22" android:endX="86" android:endY="86"><item android:offset="0" android:color="#FFFFE8A3" /><item android:offset="0.5" android:color="#FFF2C14E" /><item android:offset="1" android:color="#FFC98A1B" /></gradient>
-        </aapt:attr>
-    </path>
-    <path android:fillColor="#FFFFF8EC" android:pathData="M35,25 h8 a10,10 0 0 1 10,10 v8 a10,10 0 0 1 -10,10 h-8 a10,10 0 0 1 -10,-10 v-8 a10,10 0 0 1 10,-10z" />
-    <path android:fillColor="#FF2B1B4A" android:pathData="M65,25 h8 a10,10 0 0 1 10,10 v8 a10,10 0 0 1 -10,10 h-8 a10,10 0 0 1 -10,-10 v-8 a10,10 0 0 1 10,-10z" />
-    <path android:fillColor="#FF2B1B4A" android:pathData="M35,55 h8 a10,10 0 0 1 10,10 v8 a10,10 0 0 1 -10,10 h-8 a10,10 0 0 1 -10,-10 v-8 a10,10 0 0 1 10,-10z" />
-    <path android:fillColor="#FFFFF8EC" android:pathData="M65,55 h8 a10,10 0 0 1 10,10 v8 a10,10 0 0 1 -10,10 h-8 a10,10 0 0 1 -10,-10 v-8 a10,10 0 0 1 10,-10z" />
-    <!-- Spice Box: a 7 -->
-    <path android:strokeColor="#FFF0553A" android:strokeWidth="4" android:strokeLineCap="round" android:strokeLineJoin="round"
-        android:fillColor="#00000000" android:pathData="M33,32.5 H45 L37.5,46" />
-    <!-- Chai Sort: a glass of tea -->
-    <path android:fillColor="#FFF7EBD8" android:pathData="M63,31 H75 L73.4,47 A2,2 0 0 1 71.4,48.8 H66.6 A2,2 0 0 1 64.6,47 Z" />
-    <path android:fillColor="#FFC77A2E" android:pathData="M64,38 H74 L73.1,47 A1.5,1.5 0 0 1 71.6,48.3 H66.4 A1.5,1.5 0 0 1 64.9,47 Z" />
-    <!-- Royal Patience: a spade -->
-    <path android:fillColor="#FFFFE8A3" android:pathData="M39,62 C39,62 31,68.5 31,73 C31,76 34,77.6 36.6,76.2 C37.4,75.8 38,75 38.3,74.4 L37,79.5 L41,79.5 L39.7,74.4 C40,75 40.6,75.8 41.4,76.2 C44,77.6 47,76 47,73 C47,68.5 39,62 39,62 Z" />
-    <!-- Clockwork: a gear clock -->
-    <path android:fillColor="#FF2B1B4A" android:pathData="M69.00,60.70 L70.64,58.63 L72.24,59.01 L72.77,61.60 L73.88,62.29 L76.42,61.58 L77.49,62.83 L76.40,65.23 L76.89,66.44 L79.37,67.36 L79.50,69.00 L77.20,70.30 L76.89,71.56 L78.36,73.77 L77.49,75.17 L74.87,74.87 L73.88,75.71 L73.77,78.36 L72.24,78.99 L70.30,77.20 L69.00,77.30 L67.36,79.37 L65.76,78.99 L65.23,76.40 L64.12,75.71 L61.58,76.42 L60.51,75.17 L61.60,72.77 L61.11,71.56 L58.63,70.64 L58.50,69.00 L60.80,67.70 L61.11,66.44 L59.64,64.23 L60.51,62.83 L63.13,63.13 L64.12,62.29 L64.23,59.64 L65.76,59.01 L67.70,60.80 Z" />
-    <path android:fillColor="#FFFFF8EC" android:pathData="M69,69 m-4.6,0 a4.6,4.6 0 1,0 9.2,0 a4.6,4.6 0 1,0 -9.2,0" />
-    <path android:strokeColor="#FF2B1B4A" android:strokeWidth="1.8" android:strokeLineCap="round" android:pathData="M69,69 V65.2" />
+  <group android:scaleX="0.86" android:scaleY="0.86" android:pivotX="54" android:pivotY="54">
+    <path android:fillColor="#FFF26B3A" android:pathData="M28.00,28.00 L54.00,28.00 L54.00,37.36 C54.00,38.40 55.30,39.18 56.34,38.40 C58.42,37.10 60.50,38.40 60.50,41.00 C60.50,43.60 58.42,44.90 56.34,43.60 C55.30,42.82 54.00,43.60 54.00,44.64 L54.00,54.00 L44.64,54.00 C43.60,54.00 42.82,55.30 43.60,56.34 C44.90,58.42 43.60,60.50 41.00,60.50 C38.40,60.50 37.10,58.42 38.40,56.34 C39.18,55.30 38.40,54.00 37.36,54.00 L28.00,54.00 L28.00,28.00 Z" />
+    <path android:fillColor="#FF3A86F2" android:pathData="M54.00,28.00 L80.00,28.00 L80.00,54.00 L70.64,54.00 C69.60,54.00 68.82,52.70 69.60,51.66 C70.90,49.58 69.60,47.50 67.00,47.50 C64.40,47.50 63.10,49.58 64.40,51.66 C65.18,52.70 64.40,54.00 63.36,54.00 L54.00,54.00 L54.00,44.64 C54.00,43.60 55.30,42.82 56.34,43.60 C58.42,44.90 60.50,43.60 60.50,41.00 C60.50,38.40 58.42,37.10 56.34,38.40 C55.30,39.18 54.00,38.40 54.00,37.36 L54.00,28.00 Z" />
+    <path android:fillColor="#FF2BA36B" android:pathData="M28.00,54.00 L37.36,54.00 C38.40,54.00 39.18,55.30 38.40,56.34 C37.10,58.42 38.40,60.50 41.00,60.50 C43.60,60.50 44.90,58.42 43.60,56.34 C42.82,55.30 43.60,54.00 44.64,54.00 L54.00,54.00 L54.00,63.36 C54.00,64.40 52.70,65.18 51.66,64.40 C49.58,63.10 47.50,64.40 47.50,67.00 C47.50,69.60 49.58,70.90 51.66,69.60 C52.70,68.82 54.00,69.60 54.00,70.64 L54.00,80.00 L28.00,80.00 L28.00,54.00 Z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" android:pathData="M35.5,37 H44 L38.8,47" />
+    <group android:translateX="29" android:translateY="-24.5" android:scaleX="0.72" android:scaleY="0.72" android:pivotX="39" android:pivotY="71">
+      <path android:fillColor="#FFFFFFFF" android:pathData="M39,62 C39,62 31,68.5 31,73 C31,76 34,77.6 36.6,76.2 C37.4,75.8 38,75 38.3,74.4 L37,79.5 L41,79.5 L39.7,74.4 C40,75 40.6,75.8 41.4,76.2 C44,77.6 47,76 47,73 C47,68.5 39,62 39,62 Z" />
     </group>
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.9" android:fillColor="#00000000" android:pathData="M40,68 m-5.2,0 a5.2,5.2 0 1,0 10.4,0 a5.2,5.2 0 1,0 -10.4,0" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.7" android:strokeLineCap="round" android:pathData="M40,68 V64.9" />
+    <group android:rotation="12" android:pivotX="67" android:pivotY="67" android:translateX="5" android:translateY="5">
+      <path android:strokeWidth="1" android:pathData="M54.00,54.00 L63.36,54.00 C64.40,54.00 65.18,52.70 64.40,51.66 C63.10,49.58 64.40,47.50 67.00,47.50 C69.60,47.50 70.90,49.58 69.60,51.66 C68.82,52.70 69.60,54.00 70.64,54.00 L80.00,54.00 L80.00,80.00 L54.00,80.00 L54.00,70.64 C54.00,69.60 52.70,68.82 51.66,69.60 C49.58,70.90 47.50,69.60 47.50,67.00 C47.50,64.40 49.58,63.10 51.66,64.40 C52.70,65.18 54.00,64.40 54.00,63.36 L54.00,54.00 Z">
+        <aapt:attr name="android:fillColor">
+          <gradient android:type="linear" android:startX="54" android:startY="54" android:endX="84" android:endY="84"><item android:offset="0" android:color="#FFFFF1C4" /><item android:offset="0.45" android:color="#FFF2C14E" /><item android:offset="1" android:color="#FFB07514" /></gradient>
+        </aapt:attr>
+        <aapt:attr name="android:strokeColor">
+          <gradient android:type="linear" android:startX="54" android:startY="54" android:endX="84" android:endY="84"><item android:offset="0" android:color="#FFFFF7DD" /><item android:offset="1" android:color="#FF8A5A0E" /></gradient>
+        </aapt:attr>
+      </path>
+      <path android:fillColor="#FF8A5A0E" android:pathData="M67,61 l1.8,4.4 4.6,0.4 -3.5,3 1.1,4.5 -4,-2.4 -4,2.4 1.1,-4.5 -3.5,-3 4.6,-0.4z" />
+    </group>
+  </group>
 </vector>
