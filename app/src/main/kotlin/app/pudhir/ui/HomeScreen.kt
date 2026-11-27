@@ -61,7 +61,7 @@ import java.time.LocalTime
 fun HomeScreen(progress: Progress, onPlay: (String, Boolean) -> Unit, onStats: () -> Unit) {
     val p = LocalPalette.current
     var settings by remember { mutableStateOf(false) }
-    val dailies = Games.all.filter { !it.endless }
+    val dailies = Games.all.filter { !it.endless && !it.versus }
     val doneToday = dailies.count { progress.dailyDone(it.id) }
 
     LazyColumn(

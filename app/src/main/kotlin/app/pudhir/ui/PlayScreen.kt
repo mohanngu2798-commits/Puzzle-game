@@ -95,6 +95,7 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
                 val sub = when {
                     daily -> "Daily · " + LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM"))
                     game.endless -> "Best ${progress.bestScore(gameId)}"
+                    game.versus -> "Game $level · ${difficulty.label}"
                     else -> "Level $level · ${difficulty.label}"
                 }
                 if (picks) Text(
@@ -105,7 +106,7 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
             if (!game.endless) Pill("⏱ ${formatTime(seconds)}", p.surfaceAlt, p.ink, 30.dp)
             Spacer(Modifier.width(6.dp))
             Pill("⭐ ${progress.wallet()}", lighten(p.gold, 0.7f), darken(p.gold, 0.5f), 30.dp)
-            if (!game.endless && !daily) Box(
+            if (!game.endless && !daily && !game.versus) Box(
                 Modifier.size(40.dp).clip(CircleShape).bouncyClick {
                     val skip: () -> Unit = { progress.skipLevel(gameId); seconds = 0; round += 1 }
                     if (progress.spend(SKIP_COST)) skip() else adOffer = "a free skip" to skip
@@ -163,11 +164,11 @@ fun PlayScreen(progress: Progress, gameId: String, daily: Boolean, onHome: () ->
 
     when (val o = outcome) {
         is Outcome.Won -> WinOverlay(
-            title = if (daily) "Daily solved!" else listOf("Brilliant!", "Sharp mind!", "Well played!", "Superb!")[level % 4],
+            title = if (daily) "Daily solved!" else if (game.versus) "You win!" else listOf("Brilliant!", "Sharp mind!", "Well played!", "Superb!")[level % 4],
             stars = o.stars,
-            detail = "Solved in ${formatTime(o.seconds)}" + if (daily) " · Streak ${progress.streak()} 🔥" else "",
+            detail = (if (game.versus) "Won in " else "Solved in ") + formatTime(o.seconds) + if (daily) " · Streak ${progress.streak()} 🔥" else "",
             accent = game.accent,
-            nextLabel = if (daily) "Play levels" else "Next level",
+            nextLabel = if (daily) "Play levels" else if (game.versus) "Play again" else "Next level",
             onNext = { outcome = null; seconds = 0; if (daily) onHome() else round++ },
             onHome = onHome,
         )

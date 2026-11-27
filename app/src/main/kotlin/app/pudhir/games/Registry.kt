@@ -19,7 +19,7 @@ class PlaySession(
     val useHint: (grant: () -> Unit) -> Unit,
 )
 
-enum class Shelf(val title: String) { Hits("Quick plays"), Brain("Brain trainers") }
+enum class Shelf(val title: String) { Hits("Quick plays"), Brain("Brain trainers"), Traditional("Traditional games") }
 
 class GameInfo(
     val id: String,
@@ -31,6 +31,8 @@ class GameInfo(
     val shelf: Shelf,
     /** Score-chasing game with no levels (no daily mode). */
     val endless: Boolean = false,
+    /** Played against the phone: no daily puzzle and no skipping; difficulty sets how strong the phone plays. */
+    val versus: Boolean = false,
     val content: @Composable (PlaySession) -> Unit,
 )
 
@@ -216,6 +218,33 @@ object Games {
             ),
             Color(0xFF8E2C48), "🃏", Shelf.Hits,
         ) { RoyalPatienceGame(it) },
+        GameInfo(
+            "pallanguzhi", "Pallanguzhi", "Sow seeds, capture the most",
+            listOf(
+                "Tap a pit on your side to pick up its seeds and sow them one by one, anticlockwise.",
+                "If the next pit has seeds, pick them up and keep sowing. If it is empty, capture the pit after it.",
+                "Any pit that reaches four seeds is a pasu: its owner takes them. Most seeds at the end wins.",
+            ),
+            Color(0xFF8B5A2B), "🥥", Shelf.Traditional, versus = true,
+        ) { PallanguzhiGame(it) },
+        GameInfo(
+            "aadupuli", "Aadu Puli Attam", "Goats against tigers",
+            listOf(
+                "You lead 15 goats against 3 tigers. First place your goats one by one, then move them along the lines.",
+                "A tiger catches a goat by jumping over it in a straight line to an empty point.",
+                "Trap all the tigers so none can move. If they catch 6 goats, the tigers win.",
+            ),
+            Color(0xFFE08A1E), "🐯", Shelf.Traditional, versus = true,
+        ) { AaduPuliGame(it) },
+        GameInfo(
+            "paramapadham", "Paramapadham", "Snakes and ladders to Vaikuntam",
+            listOf(
+                "Roll the dice and race the phone to square 100, Vaikuntam.",
+                "Ladders lift you up. Snakes bring you down.",
+                "Roll a six to roll again. You must land exactly on 100.",
+            ),
+            Color(0xFF1F8A4C), "🐍", Shelf.Traditional, versus = true,
+        ) { ParamapadhamGame(it) },
     )
 
     fun byId(id: String) = all.first { it.id == id }

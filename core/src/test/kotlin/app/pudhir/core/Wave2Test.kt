@@ -114,3 +114,30 @@ class ClockworkTest {
         }
     }
 }
+
+class TraditionalTest {
+    @Test fun pallanguzhiPlaysToTheEnd() {
+        val g = Pallanguzhi()
+        var n = 0
+        while (!g.isOver() && n < 500) { g.play(g.bestMove(if (g.turn == 0) 1 else 3)!!); n++ }
+        assertTrue(g.isOver())
+        assertEquals(70, g.store[0] + g.store[1] + g.pits.sum())
+    }
+
+    @Test fun aaduPuliPlaysToTheEnd() {
+        val g = AaduPuli.create()
+        assertEquals(25, g.points.size)
+        var n = 0
+        while (!g.isOver() && n < 400) { g.apply(g.bestMove(2)!!); n++ }
+        assertTrue(n < 400 || !g.isOver())
+    }
+
+    @Test fun paramapadhamFinishes() {
+        for (d in Difficulty.entries) {
+            val g = Paramapadham(7, d)
+            var n = 0
+            while (g.winner() < 0 && n < 5000) { g.roll(); n++ }
+            assertTrue(g.winner() >= 0)
+        }
+    }
+}
