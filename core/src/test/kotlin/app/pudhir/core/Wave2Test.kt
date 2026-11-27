@@ -179,3 +179,14 @@ class TraditionalBatch2Test {
         assertTrue(g.winner() >= 0)
     }
 }
+
+class ChathurangamTest {
+    @Test fun openingAndSelfPlay() {
+        val g = Chathurangam()
+        // 8 padati single steps + 4 ashva moves + gaja jumps over the padati row (4) = 16.
+        assertEquals(16, g.moves().size)
+        var n = 0
+        while (g.result() < 0 && n < 120) { g.play(g.bestMove(2)!!); n++ }
+        assertTrue(n > 10)
+    }
+}
