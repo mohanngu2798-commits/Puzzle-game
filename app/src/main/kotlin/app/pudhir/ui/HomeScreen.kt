@@ -1,12 +1,12 @@
 package app.pudhir.ui
 
-import androidx.compose.ui.graphics.drawscope.rotate as drawRotate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -119,22 +120,13 @@ private fun greeting(): String = when (LocalTime.now().hour) {
 
 @Composable
 fun LogoMark(size: androidx.compose.ui.unit.Dp) {
-    // Same mark as the app icon: plum tile with four puzzle tiles, one still to solve.
-    androidx.compose.foundation.Canvas(
-        Modifier.size(size).clip(RoundedCornerShape(size * 0.26f))
-            .background(Brush.radialGradient(listOf(Color(0xFF4A2C7A), Color(0xFF160C2E)), center = androidx.compose.ui.geometry.Offset.Zero, radius = size.value * 3f)),
-    ) {
-        val u = this.size.width / 108f
-        val gold = Brush.linearGradient(listOf(Color(0xFFFFE8A3), Color(0xFFF2C14E), Color(0xFFC98A1B)))
-        val coral = Brush.linearGradient(listOf(Color(0xFFFFB08A), Color(0xFFF0553A)))
-        drawRotate(45f) {
-            val r = androidx.compose.ui.geometry.CornerRadius(5f * u)
-            fun tile(x: Float, y: Float, b: Brush, outline: Boolean = false) = drawRoundRect(
-                b, androidx.compose.ui.geometry.Offset(x * u, y * u), androidx.compose.ui.geometry.Size(18 * u, 18 * u), r,
-                style = if (outline) androidx.compose.ui.graphics.drawscope.Stroke(3.2f * u) else androidx.compose.ui.graphics.drawscope.Fill,
-            )
-            tile(31f, 31f, coral); tile(57f, 31f, gold); tile(31f, 57f, gold); tile(57f, 57f, gold, true)
-        }
+    // The app icon itself, so the logo and launcher always match.
+    Box(Modifier.size(size).clip(RoundedCornerShape(size * 0.26f))) {
+        androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(app.pudhir.R.drawable.ic_launcher_background), null, Modifier.fillMaxSize())
+        androidx.compose.foundation.Image(
+            androidx.compose.ui.res.painterResource(app.pudhir.R.drawable.ic_launcher_foreground), null,
+            Modifier.fillMaxSize().graphicsLayer { scaleX = 1.35f; scaleY = 1.35f },
+        )
     }
 }
 
