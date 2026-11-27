@@ -31,6 +31,11 @@ import kotlinx.coroutines.withContext
 /** Builds a puzzle off the main thread; shows a gentle loader while it is being made. */
 @Composable
 fun <T : Any> Generated(s: PlaySession, make: () -> T, content: @Composable (T) -> Unit) {
+    if (androidx.compose.ui.platform.LocalInspectionMode.current) {
+        // Screenshots: build synchronously so the puzzle itself is captured.
+        content(androidx.compose.runtime.remember(s.seed, s.difficulty) { make() })
+        return
+    }
     val value by produceState<T?>(null, s.seed, s.difficulty) {
         value = withContext(Dispatchers.Default) { make() }
     }

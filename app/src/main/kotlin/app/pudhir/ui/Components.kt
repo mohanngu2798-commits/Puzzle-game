@@ -156,6 +156,8 @@ fun Modifier.shake(trigger: Int): Modifier = composed {
 
 /** Pops in with a bouncy scale the first time it appears. */
 fun Modifier.popIn(delayMs: Int = 0): Modifier = composed {
+    // Previews and screenshots show the settled look.
+    if (androidx.compose.ui.platform.LocalInspectionMode.current) return@composed this
     val s = remember { Animatable(0.6f) }
     val a = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
