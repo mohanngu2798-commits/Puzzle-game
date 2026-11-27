@@ -1,6 +1,6 @@
 # Pudhir
 
-**Pudhir** (புதிர், "puzzle") is an offline collection of 20 puzzle games for Android, built to sharpen your mind.
+**Pudhir** (புதிர், "puzzle") is an offline collection of 40 puzzle and casual games, including traditional Tamil board games, for Android, built to sharpen your mind.
 Every game has its own levels, a new daily puzzle, streaks and stars. It needs no internet and shows no pop-up ads.
 
 ## Games

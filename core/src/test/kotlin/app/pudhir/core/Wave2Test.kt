@@ -205,3 +205,40 @@ class BrainPackTest {
     }
     @Test fun jodiPairs() { val g = Jodi(1, Difficulty.Medium); assertEquals(16, g.cards.size) }
 }
+
+class CasualPackTest {
+    @Test fun laddooMerges() {
+        val g = LaddooDrop(1)
+        repeat(40) { g.drop(0.5f); repeat(30) { g.step(1 / 60f) } }
+        assertTrue(g.score > 0 || g.isOver())
+    }
+    @Test fun holiPopFires() {
+        val g = HoliPop(1, Difficulty.Easy)
+        repeat(30) { if (!g.isWon() && !g.isLost()) g.fire(0.5f, 1.4f, (-Math.PI / 2 + (it % 5 - 2) * 0.3).toFloat()) }
+        assertTrue(g.shots > 0)
+    }
+    @Test fun snakeEats() { val g = ExpressSnake(1); var n = 0; while (!g.dead && n < 100) { g.tick(); n++ }; assertTrue(g.dead) }
+    @Test fun rangoliRegions() {
+        val g = RangoliPaint(1, Difficulty.Medium)
+        assertEquals(0, g.regionAt(0f, 0f))
+        for (i in g.regions.indices) g.paint(i, g.regions[i].colour)
+        assertTrue(g.isDone())
+    }
+    @Test fun carromPockets() {
+        val g = CarromFlick(1, Difficulty.Easy)
+        g.shoot(0.5f, (-Math.PI / 2).toFloat(), 3f)
+        var t = 0; while (g.moving && t < 2000) { g.step(1 / 60f); t++ }
+        assertTrue(!g.moving)
+    }
+}
+
+class TapCricketTest {
+    @Test fun timingScores() {
+        val g = TapCricket(1, Difficulty.Medium)
+        assertEquals(TapCricket.Shot.Six, g.judge(g.next(), 0f))
+        assertEquals(TapCricket.Shot.Four, g.judge(g.next(), g.perfect * 1.5f))
+        assertEquals(10, g.runs)
+        var n = 0; while (!g.isOver() && n < 500) { val d = g.next(); g.judge(d, null); n++ }
+        assertTrue(g.isOver())
+    }
+}

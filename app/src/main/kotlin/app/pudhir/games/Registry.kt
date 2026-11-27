@@ -344,6 +344,60 @@ object Games {
             ),
             Color(0xFF9B5DE5), "🔢", Shelf.Brain,
         ) { NagaramGame(it) },
+        GameInfo(
+            "cricket", "Super Over", "Time your shot, hit a six",
+            listOf(
+                "Six cartoon bowlers take turns, each with their own style. Tap when the ball reaches the bat.",
+                "Perfect timing hits a six. A bit off scores four, two or one. Swing too early and you may be caught.",
+                "Miss a ball on the stumps and you're bowled. Three wickets and the innings ends.",
+            ),
+            Color(0xFF2F6FE0), "🏏", Shelf.Hits, endless = true,
+        ) { TapCricketGame(it) },
+        GameInfo(
+            "laddoo", "Laddoo Drop", "Drop sweets, merge them bigger",
+            listOf(
+                "Drag to aim and let go to drop a sweet into the jar.",
+                "Two of the same sweet that touch merge into the next bigger one.",
+                "If the sweets stay above the dashed line, the game ends.",
+            ),
+            Color(0xFFF5B83D), "🟠", Shelf.Hits, endless = true,
+        ) { LaddooDropGame(it) },
+        GameInfo(
+            "holipop", "Holi Pop", "Aim colours, pop three",
+            listOf(
+                "Drag to aim, then let go to throw a colour balloon. It can bounce off the walls.",
+                "Three or more of the same colour touching pop. Balloons left hanging fall too.",
+                "Clear the board before the colours reach the bottom line.",
+            ),
+            Color(0xFFE05A8A), "🎈", Shelf.Hits,
+        ) { HoliPopGame(it) },
+        GameInfo(
+            "snake", "Express Snake", "Pick up passengers, grow the train",
+            listOf(
+                "Swipe to steer the train.",
+                "Each passenger you pick up adds a carriage, and the train speeds up.",
+                "Don't run into the edge or into your own carriages.",
+            ),
+            Color(0xFFE5484D), "🚂", Shelf.Hits, endless = true,
+        ) { ExpressSnakeGame(it) },
+        GameInfo(
+            "rangoli", "Rangoli Paint", "Colour by number",
+            listOf(
+                "Pick a colour at the bottom, then tap the petals with that number.",
+                "Petals for the chosen colour glow so they are easy to find.",
+                "Fill every petal to finish the rangoli.",
+            ),
+            Color(0xFF9B5DE5), "🌸", Shelf.Hits,
+        ) { RangoliPaintGame(it) },
+        GameInfo(
+            "carrom", "Carrom Flick", "Pocket every coin",
+            listOf(
+                "Slide to place the striker on the baseline.",
+                "Pull back and let go to shoot, like a slingshot. A longer pull hits harder.",
+                "Pocket every coin, the red queen too, before your shots run out.",
+            ),
+            Color(0xFF7A4B2A), "🎯", Shelf.Hits,
+        ) { CarromFlickGame(it) },
     )
 
     fun byId(id: String) = all.first { it.id == id }
