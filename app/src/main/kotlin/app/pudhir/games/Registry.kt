@@ -223,7 +223,7 @@ object Games {
             listOf(
                 "Tap a pit on your side to pick up its seeds and sow them one by one, anticlockwise.",
                 "If the next pit has seeds, pick them up and keep sowing. If it is empty, capture the pit after it.",
-                "Four-seed capture: whenever a pit reaches exactly four seeds, the owner of that pit takes them. Whoever holds the most seeds at the end wins.",
+                "Pasu (four-seed capture): whenever a pit reaches exactly four seeds, the owner of that pit takes them. Whoever holds the most seeds at the end wins.",
             ),
             Color(0xFF8B5A2B), "🥥", Shelf.Traditional, versus = true,
         ) { PallanguzhiGame(it) },
@@ -239,7 +239,7 @@ object Games {
         GameInfo(
             "paramapadham", "Paramapadham", "Snakes & Ladders · the original",
             listOf(
-                "Roll the dice and race the phone to square 100, the gateway to heaven.",
+                "Roll the dice and race the phone to square 100, Vaikuntam (heaven).",
                 "Ladders lift you up. Snakes bring you down.",
                 "Roll a six to roll again. You must land exactly on 100.",
             ),
@@ -249,8 +249,8 @@ object Games {
             "thaayam", "Thaayam", "Dice Race · cut and capture",
             listOf(
                 "Throw two dice sticks (0 to 3 each; two zeros count as 12). Race your three pieces round the board to the centre.",
-                "A throw of 1 is the entry throw: it is the only throw that brings a new piece onto the board.",
-                "Land on the phone's piece to cut it back home, except on the crossed safe squares. 1, 5, 6 and 12 give another throw.",
+                "A throw of 1 is Dhayam (the entry throw): it is the only throw that brings a new piece onto the board.",
+                "Vettu (cut): land on the phone's piece to send it back home, except on the crossed safe squares. 1, 5, 6 and 12 give another throw.",
             ),
             Color(0xFFB0472E), "🎲", Shelf.Traditional, versus = true,
         ) { ThaayamGame(it) },
@@ -258,7 +258,7 @@ object Games {
             "thaadi", "Thaadi", "Temple Mill · three in a row",
             listOf(
                 "Take turns placing your nine pieces on the points, then slide them along the lines.",
-                "Three of yours in a straight line lets you take away one of the phone's pieces.",
+                "Thaadi (three in a row): three of yours in a straight line lets you take away one of the phone's pieces.",
                 "Leave the phone with two pieces, or no move, to win. With three pieces left you can jump anywhere.",
             ),
             Color(0xFF7A5C3E), "⚪", Shelf.Traditional, versus = true,
@@ -300,14 +300,50 @@ object Games {
             Color(0xFF8E2C48), "🐘", Shelf.Traditional, versus = true,
         ) { ChathurangamGame(it) },
         GameInfo(
-            "vidukathai", "Vidukathai", "Folk Riddles · what am I?",
+            "vidukathai", "Vidukathai", "Brain Teasers · what am I?",
             listOf(
-                "Riddles in the style of the old Tamil village riddles, retold in English.",
+                "Brain teaser riddles, inspired by the riddle games of Tamil villages.",
                 "Read the riddle and pick the answer. You have two spare hearts for wrong guesses.",
                 "Answer every riddle in the round to win.",
             ),
             Color(0xFF7B3F8C), "❓", Shelf.Traditional,
         ) { VidukathaiGame(it) },
+        GameInfo(
+            "channels", "Water Channels", "Turn channels, water every field",
+            listOf(
+                "Tap a channel piece to turn it a quarter turn.",
+                "Connect every field to the well in the middle so water reaches them all.",
+                "No channel may be left open-ended.",
+            ),
+            Color(0xFF1C7ED6), "🚰", Shelf.Brain,
+        ) { WaterChannelsGame(it) },
+        GameInfo(
+            "jodi", "Jodi", "Find the matching pairs",
+            listOf(
+                "Tap two cards to turn them over.",
+                "If they match, they stay face up. If not, remember where they were.",
+                "Find every pair in as few tries as you can.",
+            ),
+            Color(0xFFE5487A), "🃏", Shelf.Brain,
+        ) { JodiGame(it) },
+        GameInfo(
+            "deepam", "Deepam", "Light every lamp",
+            listOf(
+                "Tapping a lamp switches it and the lamps above, below, left and right of it.",
+                "Light every lamp on the board to win.",
+                "Every board can be solved. Fewer taps is better.",
+            ),
+            Color(0xFFF59F00), "🪔", Shelf.Brain,
+        ) { DeepamGame(it) },
+        GameInfo(
+            "nagaram", "Nagaram", "Slide the tiles back in order",
+            listOf(
+                "Slide the tiles into the gap to put them back in order, 1 at the top left.",
+                "Tap any tile in the same row or column as the gap to slide a whole line.",
+                "Tiles in the right place get a white edge.",
+            ),
+            Color(0xFF9B5DE5), "🔢", Shelf.Brain,
+        ) { NagaramGame(it) },
     )
 
     fun byId(id: String) = all.first { it.id == id }

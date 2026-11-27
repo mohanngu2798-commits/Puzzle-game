@@ -150,7 +150,7 @@ fun ThaadiGame(s: PlaySession) {
     val lines = remember { (0 until 24).flatMap { i -> Thaadi.ADJ[i].filter { it > i }.map { i to it } } }
 
     fun msg(): String = when {
-        game.removing && game.turn == 0 -> "Three in a row! Tap a blue piece to take it"
+        game.removing && game.turn == 0 -> "Thaadi! (three in a row) Tap a blue piece to take it"
         game.inHand[0] > 0 -> "Place a piece · ${game.inHand[0]} in hand"
         game.onBoard(0) == 3 -> "Only three left: you can jump anywhere"
         else -> "Slide a piece to make three in a row"
@@ -369,7 +369,7 @@ fun ThaayamGame(s: PlaySession) {
     val game = remember { Thaayam(s.seed) }
     var version by remember { mutableIntStateOf(0) }
     var busy by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf("Throw the dice sticks. You need a 1, the entry throw, to bring a piece in.") }
+    var message by remember { mutableStateOf("Throw the dice sticks. You need a 1, Dhayam (the entry throw), to bring a piece in.") }
     val scope = rememberCoroutineScope()
     val rnd = remember { Random(s.seed) }
 
@@ -405,7 +405,7 @@ fun ThaayamGame(s: PlaySession) {
         if (busy || game.turn != 0 || game.pending) return
         val n = game.throwSticks(); s.haptic(false)
         message = when {
-            game.pending -> "You threw $n" + if (n == 1) " · Entry throw!" else "" + " · tap a piece to move"
+            game.pending -> "You threw $n" + if (n == 1) " · Dhayam! (entry throw)" else "" + " · tap a piece to move"
             else -> "You threw $n · no piece can move"
         }
         afterMine()

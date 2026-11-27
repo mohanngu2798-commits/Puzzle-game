@@ -81,7 +81,7 @@ fun ParamapadhamGame(s: PlaySession) {
         val who = if (r.player == 0) "You" else "The phone"
         val a = walk[r.player]
         val from = a.value.roundToInt()
-        if (r.walkedTo == from) message = "$who rolled ${r.die}, too far to reach 100"
+        if (r.walkedTo == from) message = "$who rolled ${r.die}, too far for Vaikuntam (square 100)"
         for (sq in from + 1..r.walkedTo) { a.animateTo(sq.toFloat(), spring(dampingRatio = 0.7f, stiffness = 900f)); delay(60) }
         if (r.endedAt != r.walkedTo) {
             val up = r.endedAt > r.walkedTo
@@ -105,7 +105,7 @@ fun ParamapadhamGame(s: PlaySession) {
             delay(300)
             when (game.winner()) {
                 0 -> s.onSolved(0)
-                1 -> s.onGameOver(null, "The phone reached the top first")
+                1 -> s.onGameOver(null, "The phone reached Vaikuntam (heaven) first")
                 else -> message = if (message.startsWith("You")) message else "Your turn"
             }
             busy = false

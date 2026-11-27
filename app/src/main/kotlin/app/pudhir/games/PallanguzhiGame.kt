@@ -81,6 +81,7 @@ fun PallanguzhiGame(s: PlaySession) {
         for (snap in game.lastTrace) {
             // Highlight the pit that changed.
             active = (0 until 14).firstOrNull { snap[it] != shown[it] } ?: active
+            if ((0 until 14).any { shown[it] == 4 && snap[it] == 0 } && game.lastCapture < 0 || (0 until 14).any { shown[it] == 3 && snap[it] == 4 }) message = "Pasu! (four-seed capture)"
             shown = snap
             s.haptic(false)
             delay(150)
@@ -107,7 +108,7 @@ fun PallanguzhiGame(s: PlaySession) {
             } ?: break
             val before = game.pits.copyOf()
             game.play(m)
-            message = if (game.lastCapture >= 0) "The phone captured seeds" else "The phone sowed"
+            message = if (game.lastCapture >= 0) "The phone captured seeds" else "The phone sowed its seeds"
             animate(before)
         }
     }

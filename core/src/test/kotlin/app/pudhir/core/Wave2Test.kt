@@ -190,3 +190,18 @@ class ChathurangamTest {
         assertTrue(n > 10)
     }
 }
+
+class BrainPackTest {
+    @Test fun deepamHintsSolve() {
+        for (d in Difficulty.entries) { val g = Deepam(3, d); var n = 0; while (!g.isSolved() && n < 100) { g.tap(g.hint()!!); n++ }; assertTrue(g.isSolved()) }
+    }
+    @Test fun nagaramShuffled() { for (d in Difficulty.entries) assertTrue(!Nagaram(4, d).isSolved()) }
+    @Test fun waterChannelsHintsSolve() {
+        for (d in Difficulty.entries) for (s in 1L..5L) {
+            val g = WaterChannels(s, d); var n = 0
+            while (!g.isSolved() && n < 1000) { g.rotate(g.hint() ?: break); n++ }
+            assertTrue(g.isSolved())
+        }
+    }
+    @Test fun jodiPairs() { val g = Jodi(1, Difficulty.Medium); assertEquals(16, g.cards.size) }
+}
