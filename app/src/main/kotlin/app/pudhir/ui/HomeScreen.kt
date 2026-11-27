@@ -118,9 +118,22 @@ private fun greeting(): String = when (LocalTime.now().hour) {
 
 @Composable
 fun LogoMark(size: androidx.compose.ui.unit.Dp) {
-    Box(Modifier.size(size), contentAlignment = Alignment.Center) {
-        Box(Modifier.size(size * 0.74f).rotate(45f).clip(RoundedCornerShape(size * 0.16f)).background(Color(0xFFF26B3A)))
-        Box(Modifier.size(size * 0.22f).clip(CircleShape).background(Color.White))
+    // Same mark as the app icon: plum tile with four puzzle tiles, one still to solve.
+    androidx.compose.foundation.Canvas(
+        Modifier.size(size).clip(RoundedCornerShape(size * 0.26f))
+            .background(Brush.radialGradient(listOf(Color(0xFF4A2C7A), Color(0xFF160C2E)), center = androidx.compose.ui.geometry.Offset.Zero, radius = size.value * 3f)),
+    ) {
+        val u = this.size.width / 108f
+        val gold = Brush.linearGradient(listOf(Color(0xFFFFE8A3), Color(0xFFF2C14E), Color(0xFFC98A1B)))
+        val coral = Brush.linearGradient(listOf(Color(0xFFFFB08A), Color(0xFFF0553A)))
+        androidx.compose.ui.graphics.drawscope.rotate(45f) {
+            val r = androidx.compose.ui.geometry.CornerRadius(5f * u)
+            fun tile(x: Float, y: Float, b: Brush, outline: Boolean = false) = drawRoundRect(
+                b, androidx.compose.ui.geometry.Offset(x * u, y * u), androidx.compose.ui.geometry.Size(18 * u, 18 * u), r,
+                style = if (outline) androidx.compose.ui.graphics.drawscope.Stroke(3.2f * u) else androidx.compose.ui.graphics.drawscope.Fill,
+            )
+            tile(31f, 31f, coral); tile(57f, 31f, gold); tile(31f, 57f, gold); tile(57f, 57f, gold, true)
+        }
     }
 }
 
