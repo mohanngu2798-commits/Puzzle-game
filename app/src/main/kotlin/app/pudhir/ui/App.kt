@@ -33,7 +33,7 @@ fun PudhirApp(progress: Progress) {
     PudhirTheme(progress.theme) {
         val p = LocalPalette.current
         BackHandler(enabled = screen != Screen.Home) { screen = Screen.Home }
-        Box(Modifier.fillMaxSize().background(p.bg) {
+        Box(Modifier.fillMaxSize().background(p.bg)) {
             AnimatedContent(
                 targetState = screen,
                 transitionSpec = {
