@@ -141,3 +141,41 @@ class TraditionalTest {
         }
     }
 }
+
+class TraditionalBatch2Test {
+    @Test fun thaayamFinishes() {
+        val g = Thaayam(3); val r = kotlin.random.Random(1); var n = 0
+        while (g.winner() < 0 && n < 20000) { g.throwSticks(); g.choose(2, r)?.let { g.move(it) }; n++ }
+        assertTrue(g.winner() >= 0)
+    }
+
+    @Test fun nakshatraNineIsSolvable() {
+        val g = Nakshatra(9)
+        assertEquals(20, Nakshatra.JUMPS.size)
+        var n = 0
+        while (!g.isWon() && n < 20) { val h = g.hint()!!; assertTrue(g.play(h.first, h.third)); n++ }
+        assertTrue(g.isWon())
+    }
+
+    @Test fun thaadiPlays() {
+        assertEquals(16, Thaadi.MILLS.size)
+        val g = Thaadi(); var n = 0
+        while (g.winner() < 0 && n < 300) { g.apply(g.bestMove(2)!!); n++ }
+        assertTrue(n > 18)
+    }
+
+    @Test fun pathinaaruKaaiSetup() {
+        val g = PathinaaruKaai()
+        assertEquals(37, PathinaaruKaai.N)
+        assertEquals(16, g.count(0)); assertEquals(16, g.count(1))
+        var n = 0
+        while (g.winner() < 0 && n < 300) { g.apply(g.bestMove(2)!!); n++ }
+        assertTrue(n > 4)
+    }
+
+    @Test fun sozhiFinishes() {
+        val g = Sozhi(5); var n = 0
+        while (g.winner() < 0 && n < 5000) { if (g.toss() > 0 && !g.phoneKeepsGoing(2)) g.bank(); n++ }
+        assertTrue(g.winner() >= 0)
+    }
+}

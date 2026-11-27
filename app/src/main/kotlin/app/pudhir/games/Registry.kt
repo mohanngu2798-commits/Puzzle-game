@@ -219,16 +219,16 @@ object Games {
             Color(0xFF8E2C48), "🃏", Shelf.Hits,
         ) { RoyalPatienceGame(it) },
         GameInfo(
-            "pallanguzhi", "Pallanguzhi", "Sow seeds, capture the most",
+            "pallanguzhi", "Pallanguzhi", "The Tamil seed-sowing board game",
             listOf(
                 "Tap a pit on your side to pick up its seeds and sow them one by one, anticlockwise.",
                 "If the next pit has seeds, pick them up and keep sowing. If it is empty, capture the pit after it.",
-                "Any pit that reaches four seeds is a pasu: its owner takes them. Most seeds at the end wins.",
+                "Whenever a pit reaches exactly four seeds (called a pasu), the owner of that pit takes them. Whoever holds the most seeds at the end wins.",
             ),
             Color(0xFF8B5A2B), "🥥", Shelf.Traditional, versus = true,
         ) { PallanguzhiGame(it) },
         GameInfo(
-            "aadupuli", "Aadu Puli Attam", "Goats against tigers",
+            "aadupuli", "Aadu Puli Attam", "Goats and tigers strategy game",
             listOf(
                 "You lead 15 goats against 3 tigers. First place your goats one by one, then move them along the lines.",
                 "A tiger catches a goat by jumping over it in a straight line to an empty point.",
@@ -237,14 +237,59 @@ object Games {
             Color(0xFFE08A1E), "🐯", Shelf.Traditional, versus = true,
         ) { AaduPuliGame(it) },
         GameInfo(
-            "paramapadham", "Paramapadham", "Snakes and ladders to Vaikuntam",
+            "paramapadham", "Paramapadham", "Snakes and ladders, the original",
             listOf(
-                "Roll the dice and race the phone to square 100, Vaikuntam.",
+                "Roll the dice and race the phone to square 100, called Vaikuntam (heaven).",
                 "Ladders lift you up. Snakes bring you down.",
                 "Roll a six to roll again. You must land exactly on 100.",
             ),
             Color(0xFF1F8A4C), "🐍", Shelf.Traditional, versus = true,
         ) { ParamapadhamGame(it) },
+        GameInfo(
+            "thaayam", "Thaayam", "Dice-stick race and capture game",
+            listOf(
+                "Throw two dice sticks (0 to 3 each; two zeros count as 12). Race your three pieces round the board to the centre.",
+                "A throw of 1 is called dhayam. It is the only throw that brings a new piece onto the board.",
+                "Land on the phone's piece to cut it back home, except on the crossed safe squares. 1, 5, 6 and 12 give another throw.",
+            ),
+            Color(0xFFB0472E), "🎲", Shelf.Traditional, versus = true,
+        ) { ThaayamGame(it) },
+        GameInfo(
+            "thaadi", "Thaadi", "Three-in-a-row game from temple floors",
+            listOf(
+                "Take turns placing your nine pieces on the points, then slide them along the lines.",
+                "Three of yours in a straight line is a thaadi: take away one of the phone's pieces.",
+                "Leave the phone with two pieces, or no move, to win. With three pieces left you can jump anywhere.",
+            ),
+            Color(0xFF7A5C3E), "⚪", Shelf.Traditional, versus = true,
+        ) { ThaadiGame(it) },
+        GameInfo(
+            "pathinaaru", "Pathinaaru Kaai", "Sixteen soldiers battle",
+            listOf(
+                "You and the phone each have 16 soldiers. Move one soldier a step along a line to an empty point.",
+                "Jump over an enemy soldier to the empty point just beyond it to capture it. You can keep jumping.",
+                "Capture every enemy soldier, or leave them no move, to win.",
+            ),
+            Color(0xFF5D6B3A), "⚔️", Shelf.Traditional, versus = true,
+        ) { PathinaaruKaaiGame(it) },
+        GameInfo(
+            "nakshatra", "Nakshatra", "The five-pointed star puzzle",
+            listOf(
+                "Start on any empty point of the star, pass over the next point along a straight line, and place a coin on the point after it.",
+                "The point you land on must be empty. The point you pass over can be anything.",
+                "Place all the coins to win. Plan ahead or you will run out of moves.",
+            ),
+            Color(0xFFC98A1B), "⭐", Shelf.Traditional,
+        ) { NakshatraGame(it) },
+        GameInfo(
+            "sozhi", "Sozhi", "Cowrie shell luck game",
+            listOf(
+                "Toss six cowrie shells. Every shell that lands mouth-up scores a point; all six up scores 12.",
+                "Keep tossing to build up your turn, or Bank to keep the points.",
+                "If no shell lands mouth-up you lose that turn's points. First to the target wins.",
+            ),
+            Color(0xFFB48A5A), "🐚", Shelf.Traditional, versus = true,
+        ) { SozhiGame(it) },
     )
 
     fun byId(id: String) = all.first { it.id == id }
