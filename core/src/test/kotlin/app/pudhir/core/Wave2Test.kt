@@ -207,8 +207,8 @@ class BrainPackTest {
 }
 
 class CasualPackTest {
-    @Test fun laddooMerges() {
-        val g = LaddooDrop(1)
+    @Test fun fruitMerges() {
+        val g = FruitMerge(1, Difficulty.Easy)
         repeat(40) { g.drop(0.5f); repeat(30) { g.step(1 / 60f) } }
         assertTrue(g.score > 0 || g.isOver())
     }

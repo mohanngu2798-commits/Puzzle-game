@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -25,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,7 +57,7 @@ import app.pudhir.core.CarromFlick
 import app.pudhir.core.Difficulty
 import app.pudhir.core.ExpressSnake
 import app.pudhir.core.HoliPop
-import app.pudhir.core.LaddooDrop
+import app.pudhir.core.FruitMerge
 import app.pudhir.core.RangoliPaint
 import app.pudhir.ui.ActionChip
 import app.pudhir.ui.ActionRow
@@ -92,63 +94,142 @@ private fun FrameLoop(running: Boolean, step: (Float) -> Unit) {
     }
 }
 
-private val SWEETS = listOf(
-    Color(0xFFF5B83D), Color(0xFFF26B3A), Color(0xFFE05A8A), Color(0xFF9B5DE5), Color(0xFF4FB3E8),
-    Color(0xFF62C370), Color(0xFFE5484D), Color(0xFFC8793B), Color(0xFFF2D06B), Color(0xFFFFFFFF),
+/** The fruit ladder, smallest to biggest: name, skin colour, darker shade. */
+private data class Fruit(val name: String, val skin: Color, val shade: Color)
+private val FRUITS = listOf(
+    Fruit("Jamun", Color(0xFF6B3FA0), Color(0xFF3E2163)),
+    Fruit("Lime", Color(0xFF9ACD32), Color(0xFF5E8A1E)),
+    Fruit("Guava", Color(0xFFB5D96A), Color(0xFF7FA23E)),
+    Fruit("Chikoo", Color(0xFFB07A4F), Color(0xFF7A5030)),
+    Fruit("Orange", Color(0xFFFF9A2E), Color(0xFFD9681A)),
+    Fruit("Pomegranate", Color(0xFFE0394E), Color(0xFFA51F35)),
+    Fruit("Mango", Color(0xFFFFC233), Color(0xFFF08A1C)),
+    Fruit("Coconut", Color(0xFF8A5A3B), Color(0xFF5A3822)),
+    Fruit("Papaya", Color(0xFFFFA347), Color(0xFF8FBF4A)),
+    Fruit("Jackfruit", Color(0xFFC9C34A), Color(0xFF8E8A2A)),
+    Fruit("Watermelon", Color(0xFF3FA34D), Color(0xFF1F6B2C)),
 )
-private val SWEET_NAMES = listOf("Boondi", "Jalebi", "Peda", "Barfi", "Kaju katli", "Halwa", "Gulab jamun", "Mysore pak", "Laddoo", "Golden laddoo")
 
-private fun DrawScope.sweet(c: Offset, r: Float, kind: Int) {
-    val col = SWEETS[kind % SWEETS.size]
-    drawCircle(darken(col, 0.25f), r, c)
-    drawCircle(Brush.radialGradient(listOf(lighten(col, 0.45f), col), c - Offset(r * 0.3f, r * 0.3f), r), r * 0.9f, c)
-    // Little dimples like boondi.
-    for (k in 0 until 5) {
-        val a = k * 1.3f
-        drawCircle(darken(col, 0.12f), r * 0.08f, c + Offset(kotlin.math.cos(a) * r * 0.5f, kotlin.math.sin(a) * r * 0.5f))
+/** Draws a cute fruit with a face. [cheer] 0..1 makes it beam (just merged). */
+private fun DrawScope.fruit(c: Offset, r: Float, kind: Int, cheer: Float = 0f, squash: Float = 0f) {
+    val f = FRUITS[kind.coerceIn(0, FRUITS.size - 1)]
+    val ink = Color(0xFF4A2A1E)
+    val sx = 1f + squash; val sy = 1f - squash
+    val body = Size(r * 2 * sx, r * 2 * sy)
+    val tl = Offset(c.x - r * sx, c.y - r * sy + r * squash)
+    val centre = Offset(c.x, c.y + r * squash)
+    // Leaf or crown first, so the body overlaps it.
+    when (kind) {
+        2, 4, 6, 8 -> {
+            drawLine(Color(0xFF6B4A2A), centre + Offset(0f, -r * 0.9f), centre + Offset(r * 0.1f, -r * 1.15f), r * 0.1f, StrokeCap.Round)
+            drawOval(Color(0xFF4FAE4A), centre + Offset(r * 0.05f, -r * 1.25f), Size(r * 0.55f, r * 0.28f))
+        }
+        5 -> for (k in -1..1) drawLine(f.shade, centre + Offset(k * r * 0.12f, -r * 0.85f), centre + Offset(k * r * 0.22f, -r * 1.12f), r * 0.12f, StrokeCap.Round)
     }
-    drawCircle(Color.White.copy(alpha = 0.55f), r * 0.22f, c - Offset(r * 0.38f, r * 0.38f))
+    drawOval(f.shade, tl, body)
+    drawOval(Brush.radialGradient(listOf(lighten(f.skin, 0.4f), f.skin, f.shade), centre - Offset(r * 0.35f, r * 0.4f), r * 1.5f), tl + Offset(r * 0.04f, r * 0.04f), Size(body.width - r * 0.08f, body.height - r * 0.08f))
+    // Fruit details.
+    when (kind) {
+        2 -> for (k in 0 until 6) drawCircle(f.shade.copy(alpha = 0.5f), r * 0.05f, centre + Offset(kotlin.math.cos(k * 1.1f) * r * 0.6f, kotlin.math.sin(k * 1.1f) * r * 0.55f))
+        7 -> for (k in 0 until 7) { val a = k * 0.9f; drawLine(Color(0x55FFFFFF), centre + Offset(kotlin.math.cos(a) * r * 0.3f, kotlin.math.sin(a) * r * 0.3f), centre + Offset(kotlin.math.cos(a) * r * 0.75f, kotlin.math.sin(a) * r * 0.75f), r * 0.04f) }
+        9 -> for (yy in -3..3) for (xx in -3..3) if (xx * xx + yy * yy < 11) drawCircle(f.shade.copy(alpha = 0.45f), r * 0.045f, centre + Offset(xx * r * 0.24f + (yy % 2) * r * 0.12f, yy * r * 0.24f))
+        10 -> for (k in -3..3) drawArc(f.shade, -90f + k * 2f, 180f, false, centre - Offset(r * (0.25f + abs(k) * 0.02f) * (4 - abs(k)) / 4f, r * 0.98f), Size(r * 0.5f * (4 - abs(k)) / 2f, r * 1.96f), style = Stroke(r * 0.1f))
+        8 -> drawOval(Color(0x3384C04A), tl + Offset(r * 0.1f, r * 0.1f), Size(body.width * 0.45f, body.height * 0.8f))
+        else -> Unit
+    }
+    drawOval(ink.copy(alpha = 0.85f), tl, body, style = Stroke(r * 0.06f))
+    // Shine.
+    drawOval(Color.White.copy(alpha = 0.55f), centre + Offset(-r * 0.62f, -r * 0.62f), Size(r * 0.38f, r * 0.24f))
+    // Face.
+    val face = centre + Offset(0f, r * 0.12f)
+    val eye = r * 0.11f
+    for (k in listOf(-1, 1)) {
+        val e = face + Offset(k * r * 0.3f, -r * 0.05f)
+        if (cheer > 0.3f) drawArc(ink, 200f, 140f, false, e - Offset(eye, eye * 0.6f), Size(eye * 2, eye * 1.4f), style = Stroke(r * 0.06f, cap = StrokeCap.Round))
+        else { drawCircle(ink, eye, e); drawCircle(Color.White, eye * 0.38f, e + Offset(-eye * 0.3f, -eye * 0.35f)) }
+        drawOval(Color(0x66FF6F8A), face + Offset(k * r * 0.48f - r * 0.1f, r * 0.08f), Size(r * 0.2f, r * 0.1f))
+    }
+    if (cheer > 0.3f) drawArc(Color(0xFFB8324A), 0f, 180f, true, face + Offset(-r * 0.14f, r * 0.04f), Size(r * 0.28f, r * 0.24f))
+    else drawArc(ink, 20f, 140f, false, face + Offset(-r * 0.1f, -r * 0.02f), Size(r * 0.2f, r * 0.14f), style = Stroke(r * 0.05f, cap = StrokeCap.Round))
 }
 
 @Composable
-fun LaddooDropGame(s: PlaySession) {
+fun FruitBazaarGame(s: PlaySession) {
     val p = LocalPalette.current
-    val game = remember { LaddooDrop(s.seed) }
+    val game = remember { FruitMerge(s.seed, s.difficulty) }
     var frame by remember { mutableIntStateOf(0) }
     var aim by remember { mutableFloatStateOf(0.5f) }
     var cool by remember { mutableFloatStateOf(0f) }
     var over by remember { mutableStateOf(false) }
+    val pops = remember { mutableStateListOf<Triple<Offset, Int, Float>>() }
     FrameLoop(!over) { dt ->
         game.step(dt); cool -= dt; frame++
-        if (game.merges.isNotEmpty()) { s.haptic(game.merges.any { it.third >= 5 }); game.merges.clear() }
-        if (game.isOver() && !over) { over = true; s.onGameOver(game.score, "The jar is full!") }
+        for (i in pops.indices.reversed()) { val (o, k, t) = pops[i]; if (t + dt > 0.5f) pops.removeAt(i) else pops[i] = Triple(o, k, t + dt) }
+        if (game.merges.isNotEmpty()) {
+            s.haptic(game.merges.any { it.third >= 5 })
+            for ((x, y, k) in game.merges) pops += Triple(Offset(x, y), k, 0f)
+            game.merges.clear()
+        }
+        if (!over && game.isWon()) { over = true; s.haptic(true); s.onSolved(0) }
+        else if (!over && game.isOver()) { over = true; s.onGameOver(game.score, "The basket overflowed!") }
     }
+    fun drop() { if (cool <= 0f && !over) { game.drop(aim); cool = 0.5f; s.haptic(false) } }
     Column(Modifier.fillMaxSize().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        frame.let { Text("Score ${game.score} · next: ${SWEET_NAMES[game.next]}", color = p.muted) }
-        Fit(game.height, Modifier.fillMaxWidth().weight(1f).padding(vertical = 8.dp)) {
+        frame.let {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text("${game.score}", color = p.ink, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp)
+                Text("  Grow a ${FRUITS[game.goal].name}!", color = p.muted, modifier = Modifier.weight(1f))
+                Text("Next", color = p.muted, fontSize = 12.sp)
+                Canvas(Modifier.size(34.dp)) { fruit(center, size.width * 0.36f, game.next) }
+            }
+        }
+        // The fruit ladder, lit up to the biggest fruit grown so far.
+        Canvas(Modifier.fillMaxWidth().padding(vertical = 4.dp).height(30.dp)) {
+            frame.let { }
+            val n = game.goal + 1; val step = size.width / n
+            for (k in 0 until n) {
+                val c = Offset(step * (k + 0.5f), size.height / 2)
+                if (k > game.best && k > 4) drawCircle(p.line, size.height * 0.38f, c) else fruit(c, size.height * (0.24f + 0.02f * minOf(k, 7)), k)
+            }
+        }
+        Fit(game.height, Modifier.fillMaxWidth().weight(1f).padding(vertical = 6.dp)) {
             Canvas(
-                Modifier.fillMaxSize().shadow(6.dp, RoundedCornerShape(26.dp)).clip(RoundedCornerShape(26.dp)).background(p.surface)
+                Modifier.fillMaxSize().shadow(8.dp, RoundedCornerShape(26.dp)).clip(RoundedCornerShape(26.dp)).background(Color(0xFFF6E3B8))
                     .pointerInput(Unit) {
-                        fun release() { if (cool <= 0f && !over) { game.drop(aim); cool = 0.45f; s.haptic(false) } }
                         detectDragGestures(
-                            onDragStart = { aim = it.x / size.width },
+                            onDragStart = { aim = (it.x / size.width).coerceIn(0f, 1f) },
                             onDrag = { ch, _ -> aim = (ch.position.x / size.width).coerceIn(0f, 1f) },
-                            onDragEnd = { release() },
+                            onDragEnd = { drop() },
                         )
                     }
-                    .pointerInput(Unit) { detectTapGestures { aim = it.x / size.width; if (cool <= 0f && !over) { game.drop(aim); cool = 0.45f } } },
+                    .pointerInput(Unit) { detectTapGestures { aim = (it.x / size.width).coerceIn(0f, 1f); drop() } },
             ) {
                 frame.let { }
                 val u = size.width
-                drawRect(Brush.verticalGradient(listOf(lighten(s.accent, if (p.dark) 0.1f else 0.85f), p.surface)))
-                drawLine(p.bad.copy(alpha = 0.6f), Offset(0f, game.line * u), Offset(u, game.line * u), 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f)))
+                // Basket: warm wood with woven slats.
+                drawRect(Brush.verticalGradient(listOf(Color(0xFFFFF4DA), Color(0xFFF1D79E))))
+                for (k in 1 until 7) drawLine(Color(0x22A0702A), Offset(0f, size.height * k / 7f), Offset(u, size.height * k / 7f), 3f)
+                drawRect(Color(0xFFC98E4A), Offset(0f, size.height - u * 0.025f), Size(u, u * 0.025f))
+                drawLine(Color(0xAAE5484D), Offset(0f, game.line * u), Offset(u, game.line * u), 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(16f, 10f)))
                 val r = game.radius(game.current) * u
-                drawLine(p.muted.copy(alpha = 0.35f), Offset(aim * u, r * 2), Offset(aim * u, size.height), 2f)
-                if (cool <= 0f) sweet(Offset(aim.coerceIn(r / u, 1 - r / u) * u, r + 6f), r, game.current)
-                for (b in game.balls) sweet(Offset(b.x * u, b.y * u), b.r * u, b.kind)
+                val ax = aim.coerceIn(r / u, 1 - r / u) * u
+                drawLine(Color(0x55A0702A), Offset(ax, r * 2), Offset(ax, size.height), 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 10f)))
+                if (cool <= 0f) fruit(Offset(ax, r + 8f), r, game.current)
+                for (b in game.balls) {
+                    val pop = (b.age / 0.18f).coerceAtMost(1f)
+                    val wob = if (b.age < 0.5f) kotlin.math.sin(b.age * 30f) * 0.08f * (1 - b.age / 0.5f) else 0f
+                    fruit(Offset(b.x * u, b.y * u), b.r * u * (0.6f + 0.4f * pop), b.kind, cheer = if (b.age < 0.8f && b.kind > 0) 1f else 0f, squash = wob)
+                }
+                for ((o, k, t) in pops) {
+                    val c = Offset(o.x * u, o.y * u)
+                    for (i in 0 until 10) {
+                        val a = i * 0.628f
+                        drawCircle(FRUITS[k].skin.copy(alpha = 1 - t / 0.5f), u * 0.012f, c + Offset(kotlin.math.cos(a), kotlin.math.sin(a)) * (game.radius(k) * u + t * u * 0.25f))
+                    }
+                }
             }
         }
-        Text("Drag and let go to drop. Two of the same sweet merge into a bigger one.", color = p.muted, fontSize = 13.sp)
+        Text("Drag and let go to drop. Two of the same fruit merge into a bigger one.", color = p.muted, fontSize = 13.sp)
     }
 }
 

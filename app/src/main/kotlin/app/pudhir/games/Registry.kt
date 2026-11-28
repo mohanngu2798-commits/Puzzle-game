@@ -354,14 +354,14 @@ object Games {
             Color(0xFF2F6FE0), "🏏", Shelf.Hits, endless = true,
         ) { TapCricketGame(it) },
         GameInfo(
-            "laddoo", "Laddoo Drop", "Drop sweets, merge them bigger",
+            "fruitbazaar", "Fruit Bazaar", "Drop fruits, merge them bigger",
             listOf(
-                "Drag to aim and let go to drop a sweet into the jar.",
-                "Two of the same sweet that touch merge into the next bigger one.",
-                "If the sweets stay above the dashed line, the game ends.",
+                "Drag to aim and let go to drop a fruit into the basket.",
+                "Two of the same fruit that touch merge into the next bigger one: Jamun, Lime, Guava, Chikoo, Orange, Pomegranate, Mango, Coconut, Papaya, Jackfruit, Watermelon.",
+                "Grow the goal fruit to win. If fruits pile above the dashed line, the basket overflows.",
             ),
-            Color(0xFFF5B83D), "🟠", Shelf.Hits, endless = true,
-        ) { LaddooDropGame(it) },
+            Color(0xFFFF9A2E), "🥭", Shelf.Hits,
+        ) { FruitBazaarGame(it) },
         GameInfo(
             "holipop", "Holi Pop", "Aim colours, pop three",
             listOf(

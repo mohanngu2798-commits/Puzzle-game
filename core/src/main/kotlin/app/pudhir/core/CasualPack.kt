@@ -12,30 +12,36 @@ import kotlin.random.Random
 class Ball(var x: Float, var y: Float, var r: Float, var kind: Int) {
     var vx = 0f
     var vy = 0f
+    /** Seconds since this body appeared (used for pop-in and happy faces). */
+    var age = 0f
     var id = nextId++
     companion object { var nextId = 0 }
 }
 
 /**
- * Laddoo Drop: drop sweets into the jar. Two of the same sweet touching merge into the next bigger one.
- * The jar is 1 wide and [height] tall; if a settled sweet pokes above the line the game ends.
+ * Fruit Bazaar: drop fruits into the basket. Two of the same fruit touching merge into the next bigger one.
+ * The basket is 1 wide and [height] tall. Grow the goal fruit to win; if fruits pile above the line, it's over.
  */
-class LaddooDrop(seed: Long) {
+class FruitMerge(seed: Long, difficulty: Difficulty) {
     private val rng = Random(seed)
-    val height = 1.45f
-    val line = 0.22f
+    val height = 1.4f
+    val line = 0.2f
     val balls = ArrayList<Ball>()
     var score = 0
         private set
-    var next = rng.nextInt(4)
+    /** The fruit to grow to win. */
+    val goal = when (difficulty) { Difficulty.Easy -> 6; Difficulty.Medium -> 7; Difficulty.Hard -> 9; Difficulty.Expert -> 10 }
+    var best = 0
         private set
-    var current = rng.nextInt(4)
+    var current = rng.nextInt(3)
+        private set
+    var next = rng.nextInt(4)
         private set
     /** Merges since the last call, as (x, y, newKind), for pop effects. */
     val merges = ArrayList<Triple<Float, Float, Int>>()
     private var overTime = 0f
 
-    fun radius(kind: Int) = 0.045f + kind * 0.022f
+    fun radius(kind: Int) = 0.042f + kind * 0.025f
 
     fun drop(x: Float) {
         val r = radius(current)
@@ -45,29 +51,35 @@ class LaddooDrop(seed: Long) {
 
     /** Advances the simulation by [dt] seconds. */
     fun step(dt: Float) {
-        val sub = 4; val h = dt / sub
+        val sub = 6; val h = dt / sub
+        for (b in balls) b.age += dt
         repeat(sub) {
-            for (b in balls) { b.vy += 2.2f * h; b.x += b.vx * h; b.y += b.vy * h; b.vx *= 0.995f }
+            for (b in balls) { b.vy += 2.4f * h; b.x += b.vx * h; b.y += b.vy * h; b.vx *= 0.996f }
             for (iter in 0 until 3) {
                 for (i in balls.indices) for (j in i + 1 until balls.size) {
                     val a = balls[i]; val b = balls[j]
                     val dx = b.x - a.x; val dy = b.y - a.y; val d = hypot(dx, dy); val min = a.r + b.r
                     if (d < min && d > 1e-5f) {
-                        val nx = dx / d; val ny = dy / d; val push = (min - d) / 2
-                        a.x -= nx * push; a.y -= ny * push; b.x += nx * push; b.y += ny * push
+                        val nx = dx / d; val ny = dy / d
+                        val ma = a.r * a.r; val mb = b.r * b.r; val push = min - d
+                        a.x -= nx * push * mb / (ma + mb); a.y -= ny * push * mb / (ma + mb)
+                        b.x += nx * push * ma / (ma + mb); b.y += ny * push * ma / (ma + mb)
                         val rel = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny
-                        if (rel < 0) { val imp = -rel * 0.6f; a.vx -= nx * imp; a.vy -= ny * imp; b.vx += nx * imp; b.vy += ny * imp }
+                        if (rel < 0) {
+                            val imp = -rel * 1.25f / (1 / ma + 1 / mb)
+                            a.vx -= imp / ma * nx; a.vy -= imp / ma * ny; b.vx += imp / mb * nx; b.vy += imp / mb * ny
+                        }
                     }
                 }
                 for (b in balls) {
                     if (b.x < b.r) { b.x = b.r; b.vx = abs(b.vx) * 0.3f }
                     if (b.x > 1 - b.r) { b.x = 1 - b.r; b.vx = -abs(b.vx) * 0.3f }
-                    if (b.y > height - b.r) { b.y = height - b.r; b.vy = -abs(b.vy) * 0.2f; b.vx *= 0.9f }
+                    if (b.y > height - b.r) { b.y = height - b.r; b.vy = -abs(b.vy) * 0.15f; b.vx *= 0.92f }
                 }
             }
         }
         mergeTouching()
-        val settledHigh = balls.any { it.y - it.r < line && abs(it.vy) < 0.05f && it.y > it.r + 0.05f }
+        val settledHigh = balls.any { it.y - it.r < line && abs(it.vy) < 0.06f && it.age > 1.2f }
         overTime = if (settledHigh) overTime + dt else 0f
     }
 
@@ -76,11 +88,13 @@ class LaddooDrop(seed: Long) {
         loop@ while (i < balls.size) {
             for (j in i + 1 until balls.size) {
                 val a = balls[i]; val b = balls[j]
-                if (a.kind == b.kind && a.kind < 9 && hypot(b.x - a.x, b.y - a.y) < a.r + b.r + 0.004f) {
+                if (a.kind == b.kind && a.kind < 10 && hypot(b.x - a.x, b.y - a.y) < a.r + b.r + 0.004f) {
                     val k = a.kind + 1
-                    val m = Ball((a.x + b.x) / 2, (a.y + b.y) / 2, radius(k), k).also { it.vy = -0.2f }
+                    val m = Ball((a.x + b.x) / 2, (a.y + b.y) / 2, radius(k), k).also { it.vy = -0.25f }
+                    m.x = m.x.coerceIn(m.r, 1 - m.r)
                     balls.removeAt(j); balls.removeAt(i); balls += m
                     score += (k + 1) * (k + 1) * 2
+                    best = maxOf(best, k)
                     merges += Triple(m.x, m.y, k)
                     continue@loop
                 }
@@ -89,7 +103,8 @@ class LaddooDrop(seed: Long) {
         }
     }
 
-    fun isOver() = overTime > 1.2f
+    fun isWon() = best >= goal
+    fun isOver() = overTime > 1.5f
 }
 
 /**
