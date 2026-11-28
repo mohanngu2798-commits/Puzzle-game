@@ -214,7 +214,7 @@ fun FruitBazaarGame(s: PlaySession) {
                 val r = game.radius(game.current) * u
                 val ax = aim.coerceIn(r / u, 1 - r / u) * u
                 drawLine(Color(0x55A0702A), Offset(ax, r * 2), Offset(ax, size.height), 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 10f)))
-                if (cool <= 0f) fruit(Offset(ax, r + 8f), r, game.current)
+                if (cool <= 0f) fruit(Offset(ax, r * 1.35f + 8f), r, game.current)
                 for (b in game.balls) {
                     val pop = (b.age / 0.18f).coerceAtMost(1f)
                     val wob = if (b.age < 0.5f) kotlin.math.sin(b.age * 30f) * 0.08f * (1 - b.age / 0.5f) else 0f
